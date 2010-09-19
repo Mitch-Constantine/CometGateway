@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CometGateway.Server.TelnetDemo", "CometGateway.Server.TelnetDemo\CometGateway.Server.TelnetDemo.csproj", "{03AC43DF-6281-42D1-B390-0D0326D84845}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CometGateway.Server.TelnetDemo.Tests", "CometGateway.Server.TelnetDemo.Tests\CometGateway.Server.TelnetDemo.Tests.csproj", "{503A4188-1638-45FE-A4E9-CCD164E12ED9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CometGateway.Server.Gateway", "CometGateway.Server.Gateway\CometGateway.Server.Gateway.csproj", "{772795A6-ED9E-4305-8A23-4DE11C851D75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CometGateway.Server.Gateway.Tests", "CometGateway.Server.Gateway.Tests\CometGateway.Server.Gateway.Tests.csproj", "{20B5D634-7C96-4E63-962C-DA957DA74522}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E95E889B-55D5-4822-8852-0FA8F3025BAD}"
+	ProjectSection(SolutionItems) = preProject
+		CometGateway.Server.vsmdi = CometGateway.Server.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = CometGateway.Server.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03AC43DF-6281-42D1-B390-0D0326D84845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03AC43DF-6281-42D1-B390-0D0326D84845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03AC43DF-6281-42D1-B390-0D0326D84845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03AC43DF-6281-42D1-B390-0D0326D84845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{503A4188-1638-45FE-A4E9-CCD164E12ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{503A4188-1638-45FE-A4E9-CCD164E12ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{503A4188-1638-45FE-A4E9-CCD164E12ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{503A4188-1638-45FE-A4E9-CCD164E12ED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{772795A6-ED9E-4305-8A23-4DE11C851D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{772795A6-ED9E-4305-8A23-4DE11C851D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{772795A6-ED9E-4305-8A23-4DE11C851D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{772795A6-ED9E-4305-8A23-4DE11C851D75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20B5D634-7C96-4E63-962C-DA957DA74522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20B5D634-7C96-4E63-962C-DA957DA74522}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20B5D634-7C96-4E63-962C-DA957DA74522}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20B5D634-7C96-4E63-962C-DA957DA74522}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

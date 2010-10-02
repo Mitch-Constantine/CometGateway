@@ -1,17 +1,16 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    Home Page
-</asp:Content>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <script src="../../Scripts/cometd.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery-1.4.1.js"></script>
-    <script src="../../Scripts/jquery.cometd.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery.json-2.2.js" type="text/javascript"></script>
-    <script src="../../Scripts/Views/Home/Index.js"></script>
-
-    <h2><%: ViewData["Message"] %></h2>
-    <p>
-    </p>
-</asp:Content>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server">
+    <title>Telnet Main Page</title>
+</head>
+<body>
+    <pre>
+    
+    </pre>
+    <input type="text" id="Message" />
+    <button id="btnMessage">Send</button>
+</body>
+</html>

@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{0871A7A7-E273-4FCF-AC63-AA6E20A01600}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CometGateway.Utilities", "CometGateway.Utilities\CometGateway.Utilities.csproj", "{C25087B6-8D12-48A7-9703-146F9D49FFD4}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -43,6 +43,10 @@ Global
 		{20B5D634-7C96-4E63-962C-DA957DA74522}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20B5D634-7C96-4E63-962C-DA957DA74522}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20B5D634-7C96-4E63-962C-DA957DA74522}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C25087B6-8D12-48A7-9703-146F9D49FFD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C25087B6-8D12-48A7-9703-146F9D49FFD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C25087B6-8D12-48A7-9703-146F9D49FFD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C25087B6-8D12-48A7-9703-146F9D49FFD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -86,10 +86,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\qunit.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\cometd.js" />
     <Content Include="Scripts\jquery.cometd.js" />
     <Content Include="Scripts\jquery.json-2.2.js" />
+    <Content Include="Scripts\qunit.js" />
     <Content Include="Scripts\Views\Home\Index.js" />
     <Content Include="Views\Main\Index.aspx" />
     <Content Include="Web.config" />

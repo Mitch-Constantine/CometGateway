@@ -18,7 +18,7 @@ namespace CometGateway.Server.TelnetDemo.Common
             Debug.Assert(view.ViewPath.EndsWith(".aspx"));
 
             var viewScriptPath = Regex.Replace(view.ViewPath.Replace("~/", ""), @"\.aspx$", ".js");
-            return "002" + htmlHelper.IncludeScript(new[] { viewScriptPath });
+            return "003" + htmlHelper.IncludeScript(new[] { viewScriptPath });
         }
 
         public static string IncludeScript(this HtmlHelper htmlHelper, params string[] scriptNames)

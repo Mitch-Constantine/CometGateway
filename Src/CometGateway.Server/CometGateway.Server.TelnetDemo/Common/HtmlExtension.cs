@@ -6,8 +6,6 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
-qqqqqqqqq
-
 namespace CometGateway.Server.TelnetDemo.Common
 {
     public static class HtmlExtension
@@ -20,7 +18,7 @@ namespace CometGateway.Server.TelnetDemo.Common
             Debug.Assert(view.ViewPath.EndsWith(".aspx"));
 
             var viewScriptPath = Regex.Replace(view.ViewPath.Replace("~/", ""), @"\.aspx$", ".js");
-            return htmlHelper.IncludeScript(new[] { viewScriptPath });
+            return "bbbb" + htmlHelper.IncludeScript(new[] { viewScriptPath });
         }
 
         public static string IncludeScript(this HtmlHelper htmlHelper, params string[] scriptNames)

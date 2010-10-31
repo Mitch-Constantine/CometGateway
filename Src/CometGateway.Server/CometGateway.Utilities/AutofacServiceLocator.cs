@@ -5,6 +5,8 @@ using Autofac;
 using Microsoft.Practices.ServiceLocation;
 using System.Linq;
 
+// Almost exact copy of AspComet setup :-)
+
 namespace CometGateway.Utilities
 {
     public sealed class AutofacServiceLocator : ServiceLocatorImplBase 

@@ -7,26 +7,26 @@ using AspComet.Eventing;
 
 namespace CometGateway.Server.Gateway
 {
-    public class ConnectionCache : CometGateway.Server.Gateway.IConnectionCache
+    public class ConnectionCache<TData> : CometGateway.Server.Gateway.IConnectionCache<TData>
     {
-        readonly Dictionary<string, IConnection> connectionMapping = new Dictionary<string, IConnection>();
+        readonly Dictionary<string, IConnection<TData>> connectionMapping = new Dictionary<string, IConnection<TData>>();
 
         public ConnectionCache()
         {
             EventHub.Subscribe<DisconnectedEvent>(OnClientDisconnected);
         }
 
-        public IConnection this[IClient client]
+        public IConnection<TData> this[IClient client]
         {
             get { return this[client.ID]; }
             set { this[client.ID] = value; }
         }
 
-        public IConnection this[string clientId]
+        public IConnection<TData> this[string clientId]
         {
             get
             {
-                IConnection communicationLayer = null;
+                IConnection<TData> communicationLayer = null;
                 if (!connectionMapping.TryGetValue(clientId, out communicationLayer))
                     return null;
                 return communicationLayer;
@@ -47,7 +47,7 @@ namespace CometGateway.Server.Gateway
         private void OnClientDisconnected(DisconnectedEvent ev)
         {
             IClient client = ev.Client;
-            IConnection connection = this[client];
+            IConnection<TData> connection = this[client];
 
             if (connection != null)
             {
@@ -60,20 +60,20 @@ namespace CometGateway.Server.Gateway
         }
 
 
-        public void Add(IClient client, IConnection connection)
+        public void Add(IClient client, IConnection<TData> connection)
         {
             this[client] = connection;
         }
-        public void Add(string clientId, IConnection connection)
+        public void Add(string clientId, IConnection<TData> connection)
         {
             this[clientId] = connection;
         }
 
-        public IConnection Get(IClient client)
+        public IConnection<TData> Get(IClient client)
         {
             return this[client.ID];
         }
-        public IConnection Get(string clientId)
+        public IConnection<TData> Get(string clientId)
         {
             return this[clientId];
         }

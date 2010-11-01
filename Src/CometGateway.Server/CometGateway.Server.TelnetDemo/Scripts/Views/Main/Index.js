@@ -57,7 +57,7 @@ var PageController = function (cometWrapper) {
             return;
         messageType = message.data.type;
         var handler = eval("_handle_" + messageType);
-        if (handler == null)
+        if (!handler)
             return;
         handler.call(this, message.data);
     }
@@ -68,6 +68,10 @@ var PageController = function (cometWrapper) {
 
     function _handle_disconnected(messageData) {
         dialogSwitcher.setDialog("connectDialog");
+    }
+
+    function _handle_textReceived(messageData) {
+        $("#textReceived").append(messageData.text);
     }
 
     function _handle_errorOccurred(messageData) {
@@ -103,6 +107,14 @@ var PageController = function (cometWrapper) {
                 });
             var that = this;
             cometWrapper.onMessageReceived = function (message) { _handleMessage(message); };
+        },
+
+        onClickSend: function () {
+            cometWrapper.sendMessage(
+                {
+                    type: "textEntered",
+                    text: "line typed"
+                });
         }
     };
 };
@@ -111,12 +123,13 @@ var PageController = function (cometWrapper) {
 var pageController = new PageController(cometWrapper);
 
 function inTestMode() {
-    return typeof (testMode) != "undefined";
+    return typeof("testMode") != "undefined";
 }
 
 if (!inTestMode()) {
     $(document).ready(function () {
         pageController.pageLoaded();
         $("#btnConnect").click(function () { pageController.onClickConnect(); });
+        $("#btnLineReady").click(function () { pageController.onClickSend(); });
     });
 }

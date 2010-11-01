@@ -3,18 +3,18 @@ using AspComet;
 
 namespace CometGateway.Server.Gateway
 {
-    public interface IConnectionCache
+    public interface IConnectionCache<TData>
     {
         void Remove(AspComet.IClient client);
         void Remove(string clientId);
 
-        void Add(IClient client, IConnection connection);
-        void Add(string clientId, IConnection connection);
+        void Add(IClient client, IConnection<TData> connection);
+        void Add(string clientId, IConnection<TData> connection);
 
-        IConnection Get(IClient client);
-        IConnection Get(string clientId);
+        IConnection<TData> Get(IClient client);
+        IConnection<TData> Get(string clientId);
 
-        IConnection this[AspComet.IClient client] { get; set; }
-        IConnection this[string clientId] { get; set; }
+        IConnection<TData> this[AspComet.IClient client] { get; set; }
+        IConnection<TData> this[string clientId] { get; set; }
     }
 }

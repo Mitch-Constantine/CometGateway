@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionCache.cs" />
+    <Compile Include="ConversionLayer.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="IConnectionCache.cs" />
     <Compile Include="ISocketConnection.cs" />

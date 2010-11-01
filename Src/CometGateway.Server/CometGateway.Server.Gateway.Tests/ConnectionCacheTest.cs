@@ -25,8 +25,8 @@ namespace CometGateway.Server.Gateway.Tests
             var client = MockRepository.GenerateStub<IClient>();
             client.Expect(c => c.ID).Return("abc");
 
-            var socketCommunicationLayer = MockRepository.GenerateMock<IConnection>();
-            var connectionCache = new ConnectionCache();
+            var socketCommunicationLayer = MockRepository.GenerateMock<IConnection<byte[]>>();
+            var connectionCache = new ConnectionCache<byte[]>();
             connectionCache[client] = socketCommunicationLayer;
             Assert.AreEqual(socketCommunicationLayer, connectionCache[client]);
         }
@@ -37,8 +37,8 @@ namespace CometGateway.Server.Gateway.Tests
             var client = MockRepository.GenerateStub<IClient>();
             client.Expect(c => c.ID).Return("abc");
 
-            var socketCommunicationLayer = MockRepository.GenerateMock<IConnection>();
-            var connectionCache = new ConnectionCache();
+            var socketCommunicationLayer = MockRepository.GenerateMock<IConnection<byte[]>>();
+            var connectionCache = new ConnectionCache<byte[]>();
             connectionCache[client] = socketCommunicationLayer;
             connectionCache.Remove(client);
             Assert.AreEqual(null, connectionCache[client]);
@@ -51,7 +51,7 @@ namespace CometGateway.Server.Gateway.Tests
             var client = MockRepository.GenerateStub<IClient>();
             client.Expect(c => c.ID).Return("abc");
 
-            var connectionCache = new ConnectionCache();
+            var connectionCache = new ConnectionCache<byte[]>();
             connectionCache.Remove(client);
         }
 
@@ -62,12 +62,12 @@ namespace CometGateway.Server.Gateway.Tests
             var client = mockRepository.Stub<IClient>();
             client.Expect(c => c.ID).Return("abc").Repeat.Any();
 
-            var connection = mockRepository.StrictMock<IConnection>();
+            var connection = mockRepository.StrictMock<IConnection<byte[]>>();
             connection.Expect(c => c.Connected).Return(true).Repeat.Any();
             connection.Expect(c => c.StartDisconnect());
 
             mockRepository.ReplayAll();
-            var connectionCache = new ConnectionCache();
+            var connectionCache = new ConnectionCache<byte[]>();
             connectionCache[client] = connection;
             EventHub.Publish(new DisconnectedEvent(client));
             mockRepository.VerifyAll();
@@ -80,11 +80,11 @@ namespace CometGateway.Server.Gateway.Tests
             var client = mockRepository.Stub<IClient>();
             client.Expect(c => c.ID).Return("abc").Repeat.Any();
 
-            var connection = mockRepository.StrictMock<IConnection>();
+            var connection = mockRepository.StrictMock<IConnection<byte[]>>();
             connection.Expect(c => c.Connected).Return(false).Repeat.Any();
 
             mockRepository.ReplayAll();
-            var connectionCache = new ConnectionCache();
+            var connectionCache = new ConnectionCache<byte[]>();
             connectionCache[client] = connection;
             EventHub.Publish(new DisconnectedEvent(client));
             mockRepository.VerifyAll();
@@ -99,7 +99,7 @@ namespace CometGateway.Server.Gateway.Tests
 
 
             mockRepository.ReplayAll();
-            new ConnectionCache();
+            new ConnectionCache<byte[]>();
             EventHub.Publish(new DisconnectedEvent(client));
             mockRepository.VerifyAll();
         }

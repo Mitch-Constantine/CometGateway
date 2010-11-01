@@ -77,5 +77,37 @@ namespace CometGateway.Server.Gateway.Tests
             disconnectEv.WaitOne(5000);
             Assert.IsFalse(communicationLayer.Connected);
         }
+
+        [TestMethod]
+        public void TestEcho()
+        {
+            var ev = new AutoResetEvent(false);
+            var errorOccurred = false;
+            var communicationLayer = new SocketConnection();
+            communicationLayer.ConnectionSucceeded += () =>
+            {
+                ev.Set();
+            };
+            communicationLayer.StartConnect("localhost", 7);
+            ev.WaitOne(5000);
+
+            var received = new List<byte>();
+            var receivedEvent = new AutoResetEvent(false);
+            communicationLayer.Send(new byte[] { 5, 7, 9 });
+            communicationLayer.DataReceived += (data) =>
+            {
+                received.AddRange(data);
+                if (received.Count >= 3)
+                    receivedEvent.Set();
+            };
+            receivedEvent.WaitOne(5000);
+
+            var disconnectEv = new AutoResetEvent(false);
+            communicationLayer.ServerDisconnected += () => disconnectEv.Set();
+            communicationLayer.StartDisconnect();
+            disconnectEv.WaitOne(5000);
+            
+            Assert.IsFalse(communicationLayer.Connected);
+        }
     }
 }

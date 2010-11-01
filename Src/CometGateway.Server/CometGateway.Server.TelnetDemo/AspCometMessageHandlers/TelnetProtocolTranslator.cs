@@ -11,7 +11,7 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
 {
     public class TelnetProtocolTranslator : MessageHandler
     {
-        IConnectionCache connectionCache;
+        IConnectionCache<byte[]> connectionCache;
         ISocketConnection socketConnection;
         IClientRepository clientRepository;
 
@@ -19,7 +19,7 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
         public string Channel { get; internal set; }
         
         public TelnetProtocolTranslator(
-            IConnectionCache connectionCache, 
+            IConnectionCache<byte[]> connectionCache, 
             ISocketConnection socketConnection,
             IClientRepository clientRepository
         )

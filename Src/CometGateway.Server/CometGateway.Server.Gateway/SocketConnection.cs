@@ -9,6 +9,7 @@ namespace CometGateway.Server.Gateway
     public class SocketConnection : ISocketConnection
     {
         private Socket socket;
+        private byte[] inputBuffer = new byte[1000];
 
         public void StartConnect(string server, int port)
         {
@@ -21,6 +22,11 @@ namespace CometGateway.Server.Gateway
             socket.BeginDisconnect(false, OnDisconnectCompleted, null);
         }
 
+        public void Send(byte[] data)
+        {
+            socket.BeginSend(data, 0, data.Length, SocketFlags.None, OnSendCompleted, null);
+        }
+
         public bool Connected
         {
             get { return socket != null && socket.Connected; }
@@ -29,26 +35,69 @@ namespace CometGateway.Server.Gateway
         public event Action ConnectionSucceeded;
         public event Action<string> ErrorOccurred;
         public event Action ServerDisconnected;
+        public event Action<byte[]> DataReceived;
 
         private void OnConnectionCompleted(IAsyncResult ar)
         {
+            OnOperationCompleted(
+                ar,
+                () => socket.EndConnect(ar),
+                () =>
+                    {
+                        OnConnectionSucceeded();
+                        BeginRead();
+                    }
+            );
+        }
+
+        private void BeginRead()
+        {
+            socket.BeginReceive(inputBuffer, 0, inputBuffer.Length, SocketFlags.None, OnReceiveCompleted, null);
+        }
+
+        private void OnSendCompleted(IAsyncResult ar)
+        {
+            OnOperationCompleted(ar, () => socket.EndSend(ar), null);
+        }
+
+        private void OnReceiveCompleted(IAsyncResult ar)
+        {
+            int bytesReceived = 0;
+            OnOperationCompleted(
+                ar,
+                () => bytesReceived = socket.EndReceive(ar),
+                () =>
+                {
+                    byte[] outputBytes = new byte[bytesReceived];
+                    Array.Copy(inputBuffer, outputBytes, bytesReceived);
+                    DataReceived(outputBytes);
+                    BeginRead();
+                }
+            );
+        }
+
+        private void OnOperationCompleted(IAsyncResult ar, Action toComplete, Action onSuccess)
+        {
+            bool successful = true;
+
             try
             {
-                socket.EndConnect(ar);
+                toComplete();
             }
             catch (Exception e)
             {
                 OnErrorOccurred(e.Message);
                 try
                 {
-                    socket.Dispose();
-                    socket = null;
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
                 }
-                catch (Exception) {}
-                return;
+                catch (Exception) { }
+                successful = false;
             }
 
-            OnConnectionSucceeded();
+            if (successful && onSuccess != null)
+                onSuccess();
         }
 
         private void OnDisconnectCompleted(IAsyncResult ar)

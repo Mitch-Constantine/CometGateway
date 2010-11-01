@@ -133,6 +133,29 @@ test("testDisconnected", function () {
     ok($("#connectDialog").dialog("isOpen"), "Connect dialog reopen after disconnect");
 });
 
+test("textReceived", function () {
+
+    stubCometWrapper = function () {
+        return {
+            message: { data: { type: null, server: null, port: null} },
+            onMessageReceived: null,
+            sendMessage: function (message) {
+                this.message = message;
+            }
+        }
+    } ();
+
+    $("#txtServer").val("aardwolf.com");
+    $("#txtPort").val("4000");
+    var testPageController = new PageController(stubCometWrapper);
+    testPageController.testSetup()
+    testPageController.onClickConnect();
+    stubCometWrapper.onMessageReceived({ data: { type: "connectionSucceeded"} });
+    $("#textReceived").text("123");
+    stubCometWrapper.onMessageReceived({ data: { type: "textReceived", text: "ABCD"} });
+    equal($("#textReceived").text(), "123ABCD");
+});
+
 test("ignoreIfClientIdPresent", function () {
 
     stubCometWrapper = function () {
@@ -151,6 +174,27 @@ test("ignoreIfClientIdPresent", function () {
     testPageController.testSetup()
     testPageController.onClickConnect();
     stubCometWrapper.onMessageReceived({ clientId: "ABC", data: { type: "XXXX"} });
+});
+
+test("typeText", function () {
+
+    stubCometWrapper = function () {
+        return {
+            message: { data: { type: null, server: null, port: null} },
+            onMessageReceived: null,
+            sendMessage: function (message) {
+                this.message = message;
+            }
+        }
+    } ();
+
+    $("#txtTextTyped").val("line typed");
+    var testPageController = new PageController(stubCometWrapper);
+    testPageController.testSetup();
+    testPageController.onClickSend();
+
+    equal(stubCometWrapper.message.type, "textEntered");
+    equal(stubCometWrapper.message.text, "line typed");
 });
 
 QUnit.done = function () {

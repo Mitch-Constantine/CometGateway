@@ -19,7 +19,7 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
         public void ConnectStartsConnectionAndCaches()
         {
             MockRepository mockRepository = new MockRepository();
-            var connectionCache = mockRepository.StrictMock<IConnectionCache>();
+            var connectionCache = mockRepository.StrictMock<IConnectionCache<byte[]>>();
             var socketConnection = mockRepository.DynamicMock<ISocketConnection>();
             TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(connectionCache, socketConnection, null);
 

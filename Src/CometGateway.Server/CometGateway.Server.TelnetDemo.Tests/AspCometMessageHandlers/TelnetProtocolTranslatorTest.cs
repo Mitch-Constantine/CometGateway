@@ -8,6 +8,7 @@ using CometGateway.Server.Gateway;
 using Rhino.Mocks;
 
 using AspComet;
+using System.Diagnostics;
 
 
 namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
@@ -19,8 +20,8 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
         public void ConnectStartsConnectionAndCaches()
         {
             MockRepository mockRepository = new MockRepository();
-            var connectionCache = mockRepository.StrictMock<IConnectionCache<byte[]>>();
-            var socketConnection = mockRepository.DynamicMock<ISocketConnection>();
+            var connectionCache = mockRepository.StrictMock<IConnectionCache<string>>();
+            var socketConnection = mockRepository.DynamicMock<IConnection<string>>();
             TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(connectionCache, socketConnection, null);
 
             connectionCache.Expect(cache => cache.Add("abc", socketConnection));
@@ -75,6 +76,45 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             connectMessageHandler.OnConnectSucceeded();
             mockRepository.VerifyAll();
          }
+
+        [TestMethod]
+        public void ReceiveForwardsToBrowser()
+        {
+            MockRepository mockRepository = new MockRepository();
+
+            var clientRepository = mockRepository.Stub<IClientRepository>();
+            var aClient = mockRepository.StrictMock<IClient>();
+
+
+            var messageHandler = new TelnetProtocolTranslator(
+                    null, 
+                    null, 
+                    clientRepository
+            );
+            messageHandler.ClientId = "abc";
+            messageHandler.Channel = "def";
+            clientRepository.Expect(repository => repository.GetByID("abc"))
+                            .Return(aClient);
+            aClient.Expect(client => client.Enqueue(null))
+                   .IgnoreArguments()
+                   .WhenCalled(mi =>
+                   {
+                       Assert.AreEqual(1, mi.Arguments.Length);
+                       var messages = mi.Arguments[0] as Message[];
+                       Message reply = messages.Single() as Message;
+                       Assert.AreEqual(
+                           "textReceived", 
+                           reply.GetData<string>("type")
+                       );
+                       Assert.AreEqual("ABCD", reply.GetData<string>("text"));
+                       Assert.AreEqual("def", reply.channel);
+                   });
+            aClient.Expect(c => c.FlushQueue());
+
+            mockRepository.ReplayAll();
+            messageHandler.OnDataReceived("ABCD");
+            mockRepository.VerifyAll();
+        }
 
         [TestMethod]
         public void ConnectSendsBackError()

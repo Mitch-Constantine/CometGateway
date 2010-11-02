@@ -38,11 +38,12 @@ namespace CometGateway.Server.Gateway
         {
         }
 
-        public static void WireUp<THandler>() where THandler : MessageHandler
+        public static void WireUp<THandler>(Func<Message, MessageHandler> findHandler) 
+                where THandler : MessageHandler
         {
             EventHub.Subscribe<PublishingEvent>(ev => 
             {
-                MessageHandler handler = ServiceLocator.Current.GetInstance<THandler>();
+                MessageHandler handler = findHandler(ev.Message);
                 handler.HandleMessage(ev.Message); 
             });
 

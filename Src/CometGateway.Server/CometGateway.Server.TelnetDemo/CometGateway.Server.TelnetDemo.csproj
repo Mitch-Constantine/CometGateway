@@ -83,7 +83,9 @@
     <Compile Include="AspCometMessageHandlers\ConnectMessage.cs" />
     <Compile Include="AspCometMessageHandlers\Disconnected.cs" />
     <Compile Include="AspCometMessageHandlers\ErrorOccurredMessage.cs" />
+    <Compile Include="AspCometMessageHandlers\TelnetConnection.cs" />
     <Compile Include="AspCometMessageHandlers\TelnetProtocolTranslator.cs" />
+    <Compile Include="AspCometMessageHandlers\TextReceivedMessage.cs" />
     <Compile Include="Common\IncludeScripts.cs" />
     <Compile Include="Common\EnableQUnit.cs" />
     <Compile Include="Controllers\MainController.cs" />

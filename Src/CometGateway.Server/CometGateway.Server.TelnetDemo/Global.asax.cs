@@ -38,7 +38,7 @@ namespace CometGateway.Server.TelnetDemo
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
-            MessageHandler.WireUp<TelnetProtocolTranslator>();
+            TelnetProtocolTranslator.WireUp();
         }
 
         private static void SetupIoCContainer()

@@ -70,7 +70,8 @@ namespace CometGateway.Server.Gateway
                 {
                     byte[] outputBytes = new byte[bytesReceived];
                     Array.Copy(inputBuffer, outputBytes, bytesReceived);
-                    DataReceived(outputBytes);
+                    if (DataReceived != null)
+                        DataReceived(outputBytes);
                     BeginRead();
                 }
             );

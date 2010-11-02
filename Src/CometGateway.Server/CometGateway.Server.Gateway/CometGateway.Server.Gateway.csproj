@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BytesToStringConversionLayer.cs" />
     <Compile Include="ConnectionCache.cs" />
     <Compile Include="ConversionLayer.cs" />
     <Compile Include="IConnection.cs" />

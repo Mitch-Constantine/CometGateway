@@ -51,7 +51,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BytesToStringConversionLayer.cs" />
     <Compile Include="ConnectionCacheTest.cs" />
     <Compile Include="ConversionLayerTest.cs" />
     <Compile Include="ConvertToTextTest.cs" />

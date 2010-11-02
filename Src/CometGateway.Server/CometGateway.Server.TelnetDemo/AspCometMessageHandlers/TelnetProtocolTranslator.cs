@@ -11,16 +11,16 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
 {
     public class TelnetProtocolTranslator : MessageHandler
     {
-        IConnectionCache<byte[]> connectionCache;
-        ISocketConnection socketConnection;
+        IConnectionCache<string> connectionCache;
+        IConnection<string> socketConnection;
         IClientRepository clientRepository;
 
         public string ClientId { get; internal set; }
         public string Channel { get; internal set; }
         
         public TelnetProtocolTranslator(
-            IConnectionCache<byte[]> connectionCache, 
-            ISocketConnection socketConnection,
+            IConnectionCache<string> connectionCache, 
+            IConnection<string> socketConnection,
             IClientRepository clientRepository
         )
             : base (GetMessageMap())
@@ -39,13 +39,20 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
         public void Handle(ConnectMessage message, Message rawMessage)
         {
             socketConnection.StartConnect(message.server, message.port);
-            socketConnection.ConnectionSucceeded += OnConnectSucceeded;
             connectionCache.Add(rawMessage.clientId, socketConnection);
+
+            ConfigureForHandling(rawMessage);
+        }
+
+        private void ConfigureForHandling(Message rawMessage)
+        {
             ClientId = rawMessage.clientId;
             Channel = rawMessage.channel;
+
             socketConnection.ConnectionSucceeded += OnConnectSucceeded;
             socketConnection.ErrorOccurred += OnErrorOccurred;
             socketConnection.ServerDisconnected += OnDisconnected;
+            socketConnection.DataReceived += OnDataReceived;
         }
 
         public void OnConnectSucceeded()
@@ -73,6 +80,23 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
                 client.Enqueue(rawMessage);
                 client.FlushQueue();
             }
-        }    
+        }
+
+        internal void OnDataReceived(string dataReceived)
+        {
+            Send(new TextReceivedMessage { text = dataReceived });
+        }
+
+        public static void WireUp()
+        {
+            MessageHandler.WireUp<TelnetProtocolTranslator>(FindTranslatorObject);
+        }
+
+        public static TelnetProtocolTranslator FindTranslatorObject(Message message)
+        {
+            TelnetProtocolTranslator translator = ServiceLocator.Current.GetInstance<TelnetProtocolTranslator>();
+            translator.ConfigureForHandling(message);
+            return translator;
+        }
     }
 }

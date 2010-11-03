@@ -47,12 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BytesToStringConversionLayer.cs" />
-    <Compile Include="ConnectionCache.cs" />
     <Compile Include="ConversionLayer.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="IConnectionCache.cs" />
+    <Compile Include="IMessageHandlerCache.cs" />
     <Compile Include="ISocketConnection.cs" />
     <Compile Include="MessageHandler.cs" />
+    <Compile Include="MessageHandlerCache.cs" />
     <Compile Include="MessageMap.cs" />
     <Compile Include="MessageTypeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -51,9 +51,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionCacheTest.cs" />
     <Compile Include="ConversionLayerTest.cs" />
     <Compile Include="ConvertToTextTest.cs" />
+    <Compile Include="MessageHandlerCacheTest.cs" />
     <Compile Include="MessageMapTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleMessages\SampleMessage1.cs" />

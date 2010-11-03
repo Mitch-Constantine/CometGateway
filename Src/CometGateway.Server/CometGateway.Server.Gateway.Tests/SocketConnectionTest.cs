@@ -82,7 +82,6 @@ namespace CometGateway.Server.Gateway.Tests
         public void TestEcho()
         {
             var ev = new AutoResetEvent(false);
-            var errorOccurred = false;
             var communicationLayer = new SocketConnection();
             communicationLayer.ConnectionSucceeded += () =>
             {
@@ -92,20 +91,24 @@ namespace CometGateway.Server.Gateway.Tests
             ev.WaitOne(5000);
 
             var received = new List<byte>();
-            var receivedEvent = new AutoResetEvent(false);
-            communicationLayer.Send(new byte[] { 5, 7, 9 });
-            communicationLayer.DataReceived += (data) =>
+            using (var receivedEvent = new AutoResetEvent(false))
             {
-                received.AddRange(data);
-                if (received.Count >= 3)
-                    receivedEvent.Set();
-            };
-            receivedEvent.WaitOne(5000);
+                communicationLayer.Send(new byte[] { 5, 7, 9 });
+                communicationLayer.DataReceived += data =>
+                {
+                    received.AddRange(data);
+                    if (received.Count >= 3)
+                        receivedEvent.Set();
+                };
+                receivedEvent.WaitOne(5000);
+            }
 
-            var disconnectEv = new AutoResetEvent(false);
-            communicationLayer.ServerDisconnected += () => disconnectEv.Set();
-            communicationLayer.StartDisconnect();
-            disconnectEv.WaitOne(5000);
+            using (var disconnectEv = new AutoResetEvent(false))
+            {
+                communicationLayer.ServerDisconnected += () => disconnectEv.Set();
+                communicationLayer.StartDisconnect();
+                disconnectEv.WaitOne(5000);
+            }
             
             Assert.IsFalse(communicationLayer.Connected);
         }

@@ -89,14 +89,32 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
 
         public static void WireUp()
         {
-            MessageHandler.WireUp<TelnetProtocolTranslator>(FindTranslatorObject);
+            MessageHandler.WireUp<TelnetProtocolTranslator>((message) => 
+                {
+                    IMessageHandlerCache cache = ServiceLocator.Current.GetInstance<IMessageHandlerCache>();
+                    return FindTranslatorObject(
+                        cache, 
+                        message,
+                        () => ServiceLocator.Current.GetInstance<TelnetProtocolTranslator>()
+                    );
+                }
+            );
         }
 
-        public static TelnetProtocolTranslator FindTranslatorObject(Message message)
+        public static TelnetProtocolTranslator FindTranslatorObject(
+            IMessageHandlerCache cache, 
+            Message message,
+            Func<MessageHandler> messageHandlerFactory
+        )
         {
-            TelnetProtocolTranslator translator = ServiceLocator.Current.GetInstance<TelnetProtocolTranslator>();
-            translator.ConfigureForHandling(message);
-            return translator;
+            var messageHandler = cache[message.clientId];
+            if (messageHandler == null)
+            {
+                messageHandler = messageHandlerFactory();
+                cache[message.clientId] = messageHandler;
+            }
+
+            return cache[message.clientId] as TelnetProtocolTranslator;
         }
     }
 }

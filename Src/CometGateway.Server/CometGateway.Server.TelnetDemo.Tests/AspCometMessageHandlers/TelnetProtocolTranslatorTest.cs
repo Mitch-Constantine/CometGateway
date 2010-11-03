@@ -178,5 +178,46 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             connectMessageHandler.OnDisconnected();
             mockRepository.VerifyAll();
         }
+
+        [TestMethod]
+        public void FindTranslatorObject_ReturnsExistingObject()
+        {
+            MockRepository mockRepository = new MockRepository();
+
+            var clientRepository = mockRepository.Stub<IClientRepository>();
+            var aClient = mockRepository.StrictMock<IClient>();
+            clientRepository.Expect(repository => repository.GetByID("abc"))
+                            .Return(aClient);
+
+
+            Message message = new Message();
+            message.clientId = "abc";
+
+            var cache = new MessageHandlerCache();
+            TelnetProtocolTranslator translator = new TelnetProtocolTranslator(null, null, null);
+            cache["abc"] = translator;
+
+            Assert.AreEqual(translator, TelnetProtocolTranslator.FindTranslatorObject(cache, message, null));
+        }
+
+        [TestMethod]
+        public void FindTranslatorObject_MakesNewObjectIfNeeded()
+        {
+            MockRepository mockRepository = new MockRepository();
+
+            var clientRepository = mockRepository.Stub<IClientRepository>();
+            var aClient = mockRepository.StrictMock<IClient>();
+            clientRepository.Expect(repository => repository.GetByID("abc"))
+                            .Return(aClient);
+
+
+            var message = new Message();
+            message.clientId = "abc";
+
+            var cache = new MessageHandlerCache();
+            TelnetProtocolTranslator translator = new TelnetProtocolTranslator(null, null, null);
+
+            Assert.AreEqual(translator, TelnetProtocolTranslator.FindTranslatorObject(cache, message, ()=>translator));
+        }
     }
 }

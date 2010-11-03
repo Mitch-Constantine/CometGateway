@@ -49,7 +49,6 @@
     <Compile Include="BytesToStringConversionLayer.cs" />
     <Compile Include="ConversionLayer.cs" />
     <Compile Include="IConnection.cs" />
-    <Compile Include="IConnectionCache.cs" />
     <Compile Include="IMessageHandlerCache.cs" />
     <Compile Include="ISocketConnection.cs" />
     <Compile Include="MessageHandler.cs" />

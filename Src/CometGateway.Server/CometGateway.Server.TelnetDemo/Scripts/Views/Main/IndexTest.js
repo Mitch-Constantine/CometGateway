@@ -194,7 +194,7 @@ test("typeText", function () {
     testPageController.onClickSend();
 
     equal(stubCometWrapper.message.type, "textEntered");
-    equal(stubCometWrapper.message.text, "line typed");
+    equal(stubCometWrapper.message.text, "line typed\n");
 });
 
 QUnit.done = function () {

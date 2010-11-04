@@ -113,7 +113,7 @@ var PageController = function (cometWrapper) {
             cometWrapper.sendMessage(
                 {
                     type: "textEntered",
-                    text: "line typed"
+                    text: $("#txtTextTyped").val() + "\n"
                 });
         }
     };
@@ -123,7 +123,7 @@ var PageController = function (cometWrapper) {
 var pageController = new PageController(cometWrapper);
 
 function inTestMode() {
-    return typeof("testMode") != "undefined";
+    return typeof(testMode) != "undefined";
 }
 
 if (!inTestMode()) {

@@ -56,6 +56,8 @@ namespace CometGateway.Server.TelnetDemo
             builder.RegisterType<TelnetProtocolTranslator>().As<TelnetProtocolTranslator>();
             builder.RegisterType<MessageHandlerCache>().As<IMessageHandlerCache>().SingleInstance();
             builder.RegisterType<SocketConnection>().As<ISocketConnection>();
+            builder.RegisterType<BytesToStringConversionLayer>().As<IConnection<string>>();
+            builder.RegisterType<SocketConnection>().As<IConnection<byte[]>>();
 
             // Set up the common service locator
             container = builder.Build();

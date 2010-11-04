@@ -79,6 +79,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspCometMessageHandlers\TextEnteredMessage.cs" />
     <Compile Include="AspCometMessageHandlers\ConnectionSucceededMessage.cs" />
     <Compile Include="AspCometMessageHandlers\ConnectMessage.cs" />
     <Compile Include="AspCometMessageHandlers\Disconnected.cs" />

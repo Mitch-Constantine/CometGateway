@@ -11,18 +11,21 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
 {
     public class TelnetProtocolTranslator : MessageHandler
     {
-        IConnection<string> socketConnection;
-        IClientRepository clientRepository;
+        private IConnection<string> socketConnection;
+        private IClientRepository clientRepository;
+        private IMessageHandlerCache messageHandlerCache;
 
         public string ClientId { get; internal set; }
         public string Channel { get; internal set; }
         
         public TelnetProtocolTranslator(
             IConnection<string> socketConnection,
-            IClientRepository clientRepository
+            IClientRepository clientRepository,
+            IMessageHandlerCachemessageHandlerCache
         )
             : base (GetMessageMap())
         {
+            this.messageHandlerCache = messageHandlerCache;
             this.socketConnection = socketConnection;
             this.clientRepository = clientRepository;
         }
@@ -37,6 +40,18 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
         {
             socketConnection.StartConnect(message.server, message.port);
             ConfigureForHandling(rawMessage);
+        }
+
+        public void Handle(TextEnteredMessage message, Message rawMessage)
+        {
+            socketConnection.Send(message.text);
+        }
+
+        public override void HandleDisconnect(IClient client)
+        {
+            messageHandlerCache.Remove(client);
+            socketConnection.StartDisconnect();
+            base.HandleDisconnect(client);
         }
 
         private void ConfigureForHandling(Message rawMessage)

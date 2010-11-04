@@ -21,7 +21,8 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
         {
             MockRepository mockRepository = new MockRepository();
             var socketConnection = mockRepository.DynamicMock<IConnection<string>>();
-            TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(socketConnection, null);
+            TelnetProtocolTranslator connectMessageHandler = 
+                new TelnetProtocolTranslator(socketConnection, null, null);
 
             socketConnection.Expect(connection => connection.StartConnect("test.com", 25));
 
@@ -53,7 +54,8 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             var aClient = mockRepository.StrictMock<IClient>();
 
 
-            TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(null, clientRepository);
+            TelnetProtocolTranslator connectMessageHandler = 
+                new TelnetProtocolTranslator(null, clientRepository, null);
             connectMessageHandler.ClientId = "abc";
             connectMessageHandler.Channel = "def";
             clientRepository.Expect(repository => repository.GetByID("abc"))
@@ -86,7 +88,8 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
 
             var messageHandler = new TelnetProtocolTranslator(
                     null, 
-                    clientRepository
+                    clientRepository,
+                    null
             );
             messageHandler.ClientId = "abc";
             messageHandler.Channel = "def";
@@ -136,9 +139,11 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
                    });
             aClient.Expect(c => c.FlushQueue());
 
-            TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(null, clientRepository);
-            connectMessageHandler.ClientId = "abc";
-            connectMessageHandler.Channel = "def";
+            var connectMessageHandler = new TelnetProtocolTranslator(null, clientRepository, null) 
+            { 
+                ClientId = "abc", 
+                Channel = "def" 
+            };
 
             mockRepository.ReplayAll();
             connectMessageHandler.OnErrorOccurred("it's wrong");
@@ -154,9 +159,11 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             var aClient = mockRepository.StrictMock<IClient>();
 
 
-            TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(null, clientRepository);
-            connectMessageHandler.ClientId = "abc";
-            connectMessageHandler.Channel = "def";
+            var connectMessageHandler = new TelnetProtocolTranslator(null, clientRepository, null) 
+            { 
+                ClientId = "abc", 
+                Channel = "def" 
+            };
             clientRepository.Expect(repository => repository.GetByID("abc"))
                             .Return(aClient);
             aClient.Expect(client => client.Enqueue(null))
@@ -191,7 +198,7 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             message.clientId = "abc";
 
             var cache = new MessageHandlerCache();
-            TelnetProtocolTranslator translator = new TelnetProtocolTranslator(null, null);
+            var translator = new TelnetProtocolTranslator(null, null, null);
             cache["abc"] = translator;
 
             Assert.AreEqual(translator, TelnetProtocolTranslator.FindTranslatorObject(cache, message, null));
@@ -212,7 +219,7 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             message.clientId = "abc";
 
             var cache = new MessageHandlerCache();
-            TelnetProtocolTranslator translator = new TelnetProtocolTranslator(null, null);
+            TelnetProtocolTranslator translator = new TelnetProtocolTranslator(null, null, null);
 
             Assert.AreEqual(translator, TelnetProtocolTranslator.FindTranslatorObject(cache, message, ()=>translator));
         }
@@ -222,25 +229,42 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
         {
             MockRepository mockRepository = new MockRepository();
             var socketConnection = mockRepository.DynamicMock<IConnection<string>>();
-            TelnetProtocolTranslator connectMessageHandler = new TelnetProtocolTranslator(socketConnection, null);
+            var connectMessageHandler = new TelnetProtocolTranslator(socketConnection, null, null);
 
-            socketConnection.Expect(connection => connection.StartConnect("test.com", 25));
-            socketConnection.Expect(connection => connection.ServerDisconnected += connectMessageHandler.OnDisconnected);
-            socketConnection.Expect(connection => connection.ConnectionSucceeded += connectMessageHandler.OnConnectSucceeded);
-            socketConnection.Expect(connection => connection.ErrorOccurred += connectMessageHandler.OnErrorOccurred);
+            socketConnection.Expect(connection => connection.Send("line typed"));
 
             var message = new Message();
-            message.SetData("type", "connect");
-            message.SetData("server", "test.com");
-            message.SetData("port", 25);
-            message.clientId = "abc";
-            message.channel = "def";
+            message.SetData("type", "textEntered");
+            message.SetData("text", "line typed");
 
 
             mockRepository.ReplayAll();
             connectMessageHandler.HandleMessage(message);
-            Assert.AreEqual("abc", connectMessageHandler.ClientId);
-            Assert.AreEqual("def", connectMessageHandler.Channel);
+            mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void HandleDisconnectDisconnectsSocketAndRemovesFromCache()
+        {
+            MockRepository mockRepository = new MockRepository();
+
+            var clientRepository = mockRepository.Stub<IClientRepository>();
+            var aClient = mockRepository.StrictMock<IClient>();
+
+            var messageHandlerCache = mockRepository.StrictMock<IMessageHandlerCache>();
+            messageHandlerCache.Expect(mh => mh.Remove(aClient));
+
+            var connection = mockRepository.StrictMock<IConnection<string>>();
+            connection.Expect(conn => conn.StartDisconnect());
+
+            TelnetProtocolTranslator messageHandler = new TelnetProtocolTranslator(
+                connection, 
+                clientRepository, 
+                messageHandlerCache
+            );
+
+            mockRepository.ReplayAll();
+            messageHandler.HandleDisconnect(aClient);
             mockRepository.VerifyAll();
         }
     }

@@ -13,11 +13,14 @@ namespace CometGateway.Server.Gateway
         {
             InternalConnection = connection;
 
-            connection.ServerDisconnected += OnServerDisconnected;
-            connection.ConnectionSucceeded += OnConnectionSucceeded;
-            connection.ErrorOccurred += OnErrorOccurred;
-            connection.DataReceived += OnDataReceived;  
-        }
+            if (connection != null)
+            {
+                connection.ServerDisconnected += OnServerDisconnected;
+                connection.ConnectionSucceeded += OnConnectionSucceeded;
+                connection.ErrorOccurred += OnErrorOccurred;
+                connection.DataReceived += OnDataReceived;  
+            }
+         }
 
 
         public virtual void StartConnect(string server, int port)

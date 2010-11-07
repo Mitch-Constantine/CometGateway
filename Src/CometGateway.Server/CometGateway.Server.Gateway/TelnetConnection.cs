@@ -10,7 +10,7 @@ namespace CometGateway.Server.Gateway
         private ITelnetStateMachine TelnetStateMachine { get; set; }
         
         public TelnetConnection(
-            IConnection<byte[]> connection, 
+            ISocketConnection connection, 
             ITelnetStateMachine telnetStateMachine
         ) :
             base(connection)
@@ -25,9 +25,34 @@ namespace CometGateway.Server.Gateway
 
         internal override byte[] ConvertFromInternalFormat(byte[] data)
         {
-            return data
-                    .SelectMany(byteCrt => TelnetStateMachine.Translate(byteCrt))
-                    .ToArray();
+            List<byte> sendBack;
+            List<byte> actualData;
+
+            Process(data, out sendBack, out actualData);
+            
+            if (sendBack.Any())
+                Send(sendBack.ToArray());
+            return actualData.ToArray();
+        }
+
+        internal void Process(byte[] data, out List<byte> sendBack, out List<byte> actualData)
+        {
+            sendBack = new List<byte>();
+            actualData = new List<byte>();
+
+            foreach (var byteCrt in data)
+            {
+                byte[] sendBackCrt;
+                bool isActualData;
+                TelnetStateMachine.HandleIncomingByte(
+                    byteCrt,
+                    out sendBackCrt,
+                    out isActualData
+                );
+                sendBack.AddRange(sendBackCrt);
+                if (isActualData)
+                    actualData.Add(byteCrt);
+            }
         }
     }
 }

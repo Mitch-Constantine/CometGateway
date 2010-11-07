@@ -20,33 +20,52 @@ namespace CometGateway.Server.Gateway
 
         List<byte> currentCommand = new List<byte>();
 
-        public byte[] Translate(byte incomingData)
+        public void HandleIncomingByte(
+            byte incomingData,
+            out byte[] sendBack,
+            out bool isRealData
+        )
         {
-            if (incomingData != IAC &&
-                !currentCommand.Any())
-                return new[] { incomingData };
+            bool isActualByte = 
+                incomingData != IAC &&
+                !currentCommand.Any();
+
+            bool isEscapedIAC = 
+                incomingData == IAC && 
+                currentCommand.Count == 1 &&
+                currentCommand.Single() == IAC;
+            
+            if (isActualByte || isEscapedIAC)
+            {
+                isRealData = true;
+                sendBack = new byte[] {};
+                return;
+            }
+
+            isRealData = false;
 
             currentCommand.Add(incomingData);
             byte[] commandRecognized = RecognizeCommand();
             if (commandRecognized != null)
             {
                 currentCommand = new List<Byte>();
-                return commandRecognized;
+                sendBack = commandRecognized;
             }
             else
             {
-                return new byte[] { };
+                sendBack = new byte[] { };
             }
         }
 
         private byte[] RecognizeCommand()
         {
             return MapCommands(
-                new[] { IAC, IAC }, new[] { IAC },
                 new[] { IAC, DO, BYTE }, new[] { IAC, WONT, BYTE },
                 new[] { IAC, DONT, BYTE }, new [] { IAC, WONT, BYTE },
-                new [] { IAC, SB, ANY, IAC, SE }, new int []{},
-                new [] { IAC, BYTE }, new int[] {BYTE}
+                new[] { IAC, WILL, BYTE }, new[] { IAC, DONT, BYTE },
+                new[] { IAC, WONT, BYTE }, new[] { IAC, DONT, BYTE },
+                new[] { IAC, SB, ANY, IAC, SE }, new int[] { },
+                new [] { IAC, BYTE }, new int[] {}
             );
         }
 

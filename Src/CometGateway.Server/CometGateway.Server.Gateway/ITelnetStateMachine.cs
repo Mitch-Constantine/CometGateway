@@ -7,6 +7,10 @@ namespace CometGateway.Server.Gateway
 {
     public interface ITelnetStateMachine
     {
-        byte[] Translate(byte incomingData);
+        void HandleIncomingByte(
+            byte incomingData,
+            out byte[] sendBack,
+            out bool isRealData
+        );
     }
 }

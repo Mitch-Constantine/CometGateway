@@ -68,14 +68,17 @@ namespace CometGateway.Server.Gateway
                 () => bytesReceived = socket.EndReceive(ar),
                 () =>
                 {
-                    if (bytesReceived > 0)
-                    {
-                        byte[] outputBytes = new byte[bytesReceived];
-                        Array.Copy(inputBuffer, outputBytes, bytesReceived);
-                        if (DataReceived != null)
-                            DataReceived(outputBytes);
+                    lock (this)
+                    { 
+                        if (bytesReceived > 0)
+                        {
+                            byte[] outputBytes = new byte[bytesReceived];
+                            Array.Copy(inputBuffer, outputBytes, bytesReceived);
+                            if (DataReceived != null)
+                                DataReceived(outputBytes);
+                        }
+                        BeginRead();
                     }
-                    BeginRead();
                 }
             );
         }

@@ -71,7 +71,9 @@ var PageController = function (cometWrapper) {
     }
 
     function _handle_textReceived(messageData) {
-        $("#textReceived").append(messageData.text);
+        $("#textReceived")
+            .append(messageData.text)
+            .scrollTo("max");
     }
 
     function _handle_errorOccurred(messageData) {
@@ -115,6 +117,7 @@ var PageController = function (cometWrapper) {
                     type: "textEntered",
                     text: $("#txtTextTyped").val() + "\n"
                 });
+            $("#txtTextTyped").val("");
         }
     };
 };

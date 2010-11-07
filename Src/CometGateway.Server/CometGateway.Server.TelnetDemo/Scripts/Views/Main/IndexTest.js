@@ -195,6 +195,7 @@ test("typeText", function () {
 
     equal(stubCometWrapper.message.type, "textEntered");
     equal(stubCometWrapper.message.text, "line typed\n");
+    equal($("#txtTextTyped").val(), "");
 });
 
 QUnit.done = function () {

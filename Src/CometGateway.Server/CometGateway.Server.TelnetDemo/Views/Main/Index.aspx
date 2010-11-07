@@ -13,9 +13,11 @@
         "cometd.js",
         "jquery.json-2.2.js",
         "jquery.cometd.js",
-        "cometdwrapper.js"
+        "cometdwrapper.js",
+        "jquery.scrollTo-1.4.2.js"
     )%>
-    <%=Html.IncludeCss("jquery-ui-1.8.5.custom.css")%>
+    <%=Html.IncludeCss("jquery-ui-1.8.6.custom.css")%>
+    <%=Html.IncludeCss("Site.css")%>
     <%=Html.IncludePageScript() %>
 </head>
 <body>

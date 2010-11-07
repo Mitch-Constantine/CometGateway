@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BytesToStringConversionLayer.cs" />
+    <Compile Include="ITelnetConnection.cs" />
     <Compile Include="TelnetStateMachine.cs" />
     <Compile Include="ITelnetStateMachine.cs" />
     <Compile Include="ProtocolLayer.cs" />

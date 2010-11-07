@@ -5,11 +5,11 @@ using System.Text;
 
 namespace CometGateway.Server.Gateway
 {
-    public class TelnetProtocolImplementation : ProtocolLayer<byte[], byte[]>, ITelnetConnection
+    public class TelnetConnection : ProtocolLayer<byte[], byte[]>, ITelnetConnection
     {
         private ITelnetStateMachine TelnetStateMachine { get; set; }
         
-        public TelnetProtocolImplementation(
+        public TelnetConnection(
             IConnection<byte[]> connection, 
             ITelnetStateMachine telnetStateMachine
         ) :

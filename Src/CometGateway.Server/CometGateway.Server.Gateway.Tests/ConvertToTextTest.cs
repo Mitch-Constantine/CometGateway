@@ -13,7 +13,7 @@ namespace CometGateway.Server.Gateway.Tests
         [TestMethod]
         public void TestConvertStringToBytes()
         {
-            IConnection<byte[]> connection = MockRepository.GenerateStub<IConnection<byte[]>>();
+            ITelnetConnection connection = MockRepository.GenerateStub<ITelnetConnection>();
             BytesToStringConversionLayer conversion = new BytesToStringConversionLayer(connection);
             CollectionAssert.AreEqual(new byte[] { 65, 66, 67 }, conversion.ConvertToInternalFormat("ABC"));
         }
@@ -21,7 +21,7 @@ namespace CometGateway.Server.Gateway.Tests
         [TestMethod]
         public void TestConvertBytesToString()
         {
-            IConnection<byte[]> connection = MockRepository.GenerateStub<IConnection<byte[]>>();
+            ITelnetConnection connection = MockRepository.GenerateStub<ITelnetConnection>();
             BytesToStringConversionLayer conversion = new BytesToStringConversionLayer(connection);
             Assert.AreEqual("ABC", conversion.ConvertFromInternalFormat(new byte[] { 65, 66, 67 }));
         }

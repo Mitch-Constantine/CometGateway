@@ -7,7 +7,7 @@ namespace CometGateway.Server.Gateway
 {
     public class BytesToStringConversionLayer : ProtocolLayer<string, byte[]>
     {
-        public BytesToStringConversionLayer(IConnection<byte[]> connection)
+        public BytesToStringConversionLayer(ITelnetConnection connection)
             : base(connection)
         {
         }

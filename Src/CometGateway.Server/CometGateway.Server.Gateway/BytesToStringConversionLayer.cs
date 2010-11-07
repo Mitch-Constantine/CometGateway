@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CometGateway.Server.Gateway
 {
-    public class BytesToStringConversionLayer : ConversionLayer<string, byte[]>
+    public class BytesToStringConversionLayer : ProtocolLayer<string, byte[]>
     {
         public BytesToStringConversionLayer(IConnection<byte[]> connection)
             : base(connection)

@@ -10,7 +10,7 @@ namespace CometGateway.Server.Gateway.Tests
     [TestClass]
     public class ConversionLayerTest
     {
-        private class SampleConversionLayer : ConversionLayer<string, string>
+        private class SampleConversionLayer : ProtocolLayer<string, string>
         {
             public SampleConversionLayer(IConnection<string> connection)
                 : base(connection)

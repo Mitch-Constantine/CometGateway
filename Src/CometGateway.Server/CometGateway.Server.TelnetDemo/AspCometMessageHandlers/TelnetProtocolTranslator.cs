@@ -21,7 +21,7 @@ namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
         public TelnetProtocolTranslator(
             IConnection<string> socketConnection,
             IClientRepository clientRepository,
-            IMessageHandlerCachemessageHandlerCache
+            IMessageHandlerCache messageHandlerCache
         )
             : base (GetMessageMap())
         {

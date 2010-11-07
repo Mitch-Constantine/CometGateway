@@ -59,6 +59,7 @@
     <Compile Include="SampleMessages\SampleMessage1.cs" />
     <Compile Include="SampleMessages\SampleMessage2.cs" />
     <Compile Include="SocketConnectionTest.cs" />
+    <Compile Include="TelnetStateMachineTest.cs" />
     <Compile Include="TestMessageHandler.cs" />
   </ItemGroup>
   <ItemGroup>

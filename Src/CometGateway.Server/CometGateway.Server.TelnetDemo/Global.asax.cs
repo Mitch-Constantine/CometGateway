@@ -14,6 +14,9 @@ using CometGateway.Utilities;
 using Microsoft.Practices.ServiceLocation;
 using CometGateway.Server.Gateway;
 using CometGateway.Server.Gateway.ANSIColorsSupport;
+using CometGateway.Server.Gateway.MessageHandling;
+using CometGateway.Server.Gateway.Telnet;
+using CometGateway.Server.Gateway.Infrastructure;
 
 
 namespace CometGateway.Server.TelnetDemo

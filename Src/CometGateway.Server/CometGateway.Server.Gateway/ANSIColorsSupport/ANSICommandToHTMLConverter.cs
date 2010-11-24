@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using CometGateway.Server.Gateway;
 using System.Drawing;
+using CometGateway.Server.Gateway.Infrastructure;
 
 namespace CometGateway.Server.Gateway.ANSIColorsSupport
 {

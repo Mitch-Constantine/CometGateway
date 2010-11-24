@@ -9,10 +9,12 @@ using Rhino.Mocks;
 
 using AspComet;
 using System.Diagnostics;
+using CometGateway.Server.Gateway.MessageHandling;
 
 
 namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
 {
+
     [TestClass]
     public class TelnetProtocolTranslatorTest
     {

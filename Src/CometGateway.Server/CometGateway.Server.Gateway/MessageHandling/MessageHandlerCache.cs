@@ -5,9 +5,9 @@ using System.Text;
 using AspComet;
 using AspComet.Eventing;
 
-namespace CometGateway.Server.Gateway
+namespace CometGateway.Server.Gateway.MessageHandling
 {
-    public class MessageHandlerCache : CometGateway.Server.Gateway.IMessageHandlerCache
+    public class MessageHandlerCache : IMessageHandlerCache
     {
         readonly Dictionary<string, MessageHandler> connectionMapping = 
                         new Dictionary<string, MessageHandler>();

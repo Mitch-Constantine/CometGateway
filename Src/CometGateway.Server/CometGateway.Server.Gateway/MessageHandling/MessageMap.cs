@@ -5,7 +5,7 @@ using System.Text;
 using AspComet;
 using System.Reflection;
 
-namespace CometGateway.Server.Gateway
+namespace CometGateway.Server.Gateway.MessageHandling
 {
     public class MessageMap
     {

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CometGateway.Server.Gateway.Infrastructure;
+using CometGateway.Server.Gateway.Telnet;
 
-namespace CometGateway.Server.Gateway
+namespace CometGateway.Server.Gateway.Telnet
 {
     public class BytesToStringConversionLayer : ProtocolLayer<string, string, byte[], byte[]>, IRawStringConnection
     {

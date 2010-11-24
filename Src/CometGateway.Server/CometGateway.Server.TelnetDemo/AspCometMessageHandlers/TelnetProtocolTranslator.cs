@@ -6,6 +6,7 @@ using CometGateway.Server.Gateway;
 using AspComet;
 using Microsoft.Practices.ServiceLocation;
 using System.Threading;
+using CometGateway.Server.Gateway.MessageHandling;
 
 namespace CometGateway.Server.TelnetDemo.AspCometMessageHandlers
 {

@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using log4net;
 
-namespace CometGateway.Server.Gateway
+namespace CometGateway.Server.Gateway.Telnet
 {
     public class SocketConnection : ISocketConnection
     {

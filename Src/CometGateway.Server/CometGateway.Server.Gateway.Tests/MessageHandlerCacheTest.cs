@@ -7,6 +7,7 @@ using System.Collections;
 using AspComet.Eventing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
+using CometGateway.Server.Gateway.MessageHandling;
 
 namespace CometGateway.Server.Gateway.Tests
 {

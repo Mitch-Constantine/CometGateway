@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CometGateway.Server.Gateway
+namespace CometGateway.Server.Gateway.Infrastructure
 {
     public interface IConnection<TDataReceived, TDataSent>
     {

@@ -1,5 +1,6 @@
 ﻿using System;
-namespace CometGateway.Server.Gateway
+
+namespace CometGateway.Server.Gateway.MessageHandling
 {
     public interface IMessageHandlerCache
     {

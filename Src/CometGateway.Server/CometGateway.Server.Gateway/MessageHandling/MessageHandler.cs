@@ -8,7 +8,7 @@ using Microsoft.Practices.ServiceLocation;
 using System.Reflection;
 using log4net;
 
-namespace CometGateway.Server.Gateway
+namespace CometGateway.Server.Gateway.MessageHandling
 {
     public class MessageHandler     
     {

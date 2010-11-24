@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AspComet;
 using System.Reflection;
+using CometGateway.Server.Gateway.MessageHandling;
 
 namespace CometGateway.Server.Gateway.Tests
 {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CometGateway.Server.Gateway
 {
-    public interface ISocketConnection : IConnection<byte[]>
+    public interface ISocketConnection : IConnection<byte[], byte[]>
     {
     }
 }

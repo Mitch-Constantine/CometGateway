@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CometGateway.Server.Gateway
 {
-    public class TelnetConnection : ProtocolLayer<byte[], byte[]>, ITelnetConnection
+    public class TelnetConnection : ProtocolLayer<byte[], byte[], byte[], byte[]>, ITelnetConnection
     {
         private ITelnetStateMachine TelnetStateMachine { get; set; }
         

@@ -5,18 +5,18 @@ using System.Text;
 
 namespace CometGateway.Server.Gateway
 {
-    public interface IConnection<TData>
+    public interface IConnection<TDataReceived, TDataSent>
     {
         void StartConnect(string server, int port);
         void StartDisconnect();
 
-        void Send(TData data);
+        void Send(TDataSent data);
 
         bool Connected { get; }
 
         event Action ServerDisconnected;
         event Action ConnectionSucceeded;
         event Action<string> ErrorOccurred;
-        event Action<TData> DataReceived;
+        event Action<TDataReceived> DataReceived;
     }
 }

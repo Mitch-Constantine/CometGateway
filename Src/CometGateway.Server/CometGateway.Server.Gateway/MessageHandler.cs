@@ -6,11 +6,14 @@ using AspComet;
 using AspComet.Eventing;
 using Microsoft.Practices.ServiceLocation;
 using System.Reflection;
+using log4net;
 
 namespace CometGateway.Server.Gateway
 {
     public class MessageHandler     
     {
+        protected static readonly ILog log = LogManager.GetLogger(typeof(MessageHandler).Name);
+
         protected MessageMap MessageMap { get; private set; }
 
         public MessageHandler(MessageMap messageMap)
@@ -20,6 +23,7 @@ namespace CometGateway.Server.Gateway
 
         public virtual void HandleMessage(Message rawMessage)
         {
+            LogMessage("Message received", rawMessage);
             object decoded = MessageMap.Decode(rawMessage);
             Type messageType = decoded.GetType();
 
@@ -32,6 +36,16 @@ namespace CometGateway.Server.Gateway
                                                       );
             if (messageHandler != null)
                 messageHandler.Invoke(this, new object[] { decoded, rawMessage });
+        }
+
+        protected static void LogMessage(string header, Message rawMessage)
+        {
+            log.Info(header);
+            log.InfoFormat("Client ID:" + rawMessage.clientId);
+            foreach (var dataKey in rawMessage.data as Dictionary<string, object>)
+            {
+                log.InfoFormat("Message: {0} as {1}", dataKey.Key, dataKey.Value);
+            }
         }
 
         public virtual void HandleDisconnect(IClient client)

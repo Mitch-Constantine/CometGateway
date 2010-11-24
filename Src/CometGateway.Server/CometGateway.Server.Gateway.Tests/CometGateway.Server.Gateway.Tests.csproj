@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AspComet">
+    <Reference Include="AspComet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\Lib\ASPComet\AspComet.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -44,6 +44,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -51,6 +52,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANSIColorsSupport\ANSICommandsDecoderTest.cs" />
+    <Compile Include="ANSIColorsSupport\ANSICommandToHTMLConverterTest.cs" />
     <Compile Include="ConversionLayerTest.cs" />
     <Compile Include="ConvertToTextTest.cs" />
     <Compile Include="MessageHandlerCacheTest.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="SampleMessages\SampleMessage1.cs" />
     <Compile Include="SampleMessages\SampleMessage2.cs" />
     <Compile Include="SocketConnectionTest.cs" />
+    <Compile Include="TelnetConnectionTest.cs" />
     <Compile Include="TelnetStateMachineTest.cs" />
     <Compile Include="TestMessageHandler.cs" />
   </ItemGroup>

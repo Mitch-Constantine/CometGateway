@@ -18,6 +18,15 @@ namespace CometGateway.Server.TelnetDemo.Tests.Controllers
             var result = new MainController().Index() as ViewResult;
             Assert.AreEqual("", result.ViewName);
         }
+
+        [TestMethod]
+        public void TestAardwolf()
+        {
+            var result = new MainController().Aardwolf() as ViewResult;
+            Assert.AreEqual("aardwolf.org", result.ViewData["server"]);
+            Assert.AreEqual("4000", result.ViewData["port"]);
+        }
+
         [TestMethod]
         public void Test_TestMode()
         {

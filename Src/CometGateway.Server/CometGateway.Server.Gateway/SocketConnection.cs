@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using log4net;
 
 namespace CometGateway.Server.Gateway
 {
@@ -11,8 +12,16 @@ namespace CometGateway.Server.Gateway
         private Socket socket;
         private byte[] inputBuffer = new byte[1000];
 
+        private string server;
+        private int port;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(SocketConnection).Name);
+
         public void StartConnect(string server, int port)
         {
+            this.server = server;
+            this.port = port;
+
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.BeginConnect(server, port, OnConnectionCompleted, null);
         }
@@ -93,18 +102,40 @@ namespace CometGateway.Server.Gateway
             }
             catch (Exception e)
             {
+                log.Error("Networking error", e);
+
                 OnErrorOccurred(e.Message);
                 try
                 {
                     socket.Shutdown(SocketShutdown.Both);
                     socket.Close();
                 }
-                catch (Exception) { }
+                catch (Exception eClose) 
+                {
+                    log.Error("Error closing connection:", eClose);
+                }
                 successful = false;
             }
 
-            if (successful && onSuccess != null)
-                onSuccess();
+            try
+            {
+                if (!socket.Connected)
+                    OnDisconnected();
+            }
+            catch (Exception e)
+            {
+                log.Error("Unexpected exception", e);
+            }
+
+            try
+            {
+                if (successful && onSuccess != null)
+                    onSuccess();
+            }
+            catch (Exception e)
+            {
+                log.Error("Unexpected exception", e);
+            }
         }
 
         private void OnDisconnectCompleted(IAsyncResult ar)
@@ -115,13 +146,17 @@ namespace CometGateway.Server.Gateway
                 socket.Dispose();
                 socket = null;
             }
-            catch (Exception) {}
+            catch (Exception e) 
+            {
+                log.Error("Error closing connection:", e);
+            }
             
             OnDisconnected();
         }
 
         private void OnConnectionSucceeded()
         {
+            log.InfoFormat("Connection succeeded to {0} port {1}", server, port );
             if (ConnectionSucceeded != null)
                 ConnectionSucceeded();
         }

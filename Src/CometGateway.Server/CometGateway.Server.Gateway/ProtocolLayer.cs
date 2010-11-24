@@ -5,11 +5,15 @@ using System.Text;
 
 namespace CometGateway.Server.Gateway
 {
-    public abstract class ProtocolLayer<TExposed, TInternal> : IConnection<TExposed>
+    public abstract class ProtocolLayer<
+        TExposedReceived, 
+        TExposedSent, 
+        TInternalReceived, 
+        TInternalSent> : IConnection<TExposedReceived, TExposedSent>
     {
-        public IConnection<TInternal> InternalConnection { get; private set; }
+        public IConnection<TInternalReceived, TInternalSent> InternalConnection { get; private set; }
 
-        public ProtocolLayer(IConnection<TInternal> connection)
+        public ProtocolLayer(IConnection<TInternalReceived, TInternalSent> connection)
         {
             InternalConnection = connection;
 
@@ -33,7 +37,7 @@ namespace CometGateway.Server.Gateway
             InternalConnection.StartDisconnect();
         }
 
-        public void Send(TExposed data)
+        public void Send(TExposedSent data)
         {
             var convertedData = ConvertToInternalFormat(data);
             InternalConnection.Send(convertedData);
@@ -47,10 +51,10 @@ namespace CometGateway.Server.Gateway
         public event Action ServerDisconnected;
         public event Action ConnectionSucceeded;
         public event Action<string> ErrorOccurred;
-        public event Action<TExposed> DataReceived;
+        public event Action<TExposedReceived> DataReceived;
 
-        internal abstract TInternal ConvertToInternalFormat(TExposed data);
-        internal abstract TExposed ConvertFromInternalFormat(TInternal data);
+        internal abstract TInternalSent ConvertToInternalFormat(TExposedSent data);
+        internal abstract TExposedReceived ConvertFromInternalFormat(TInternalReceived data);
 
         internal void OnConnectionSucceeded()
         {
@@ -70,7 +74,7 @@ namespace CometGateway.Server.Gateway
                 ErrorOccurred(message);
         }
 
-        internal void OnDataReceived(TInternal data)
+        internal void OnDataReceived(TInternalReceived data)
         {
             if (DataReceived != null)
             {

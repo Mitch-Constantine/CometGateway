@@ -92,6 +92,7 @@
 
     function _connectionClosed() {
         _log('Connection to Server Closed');
+        _clearDummyMessage();
     }
 
     var _connected = false;
@@ -117,9 +118,9 @@
     }
 
     function _log(message) {
-        if (console.log) {
-            console.log(message);
-        }
+        /*if (console.log) {
+        console.log(message);
+        }*/
     }
 
     function _raise(event) {

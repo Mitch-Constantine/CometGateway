@@ -10,9 +10,9 @@ namespace CometGateway.Server.Gateway.Tests
     [TestClass]
     public class ConversionLayerTest
     {
-        private class SampleConversionLayer : ProtocolLayer<string, string>
+        private class SampleConversionLayer : ProtocolLayer<string, string, string, string>
         {
-            public SampleConversionLayer(IConnection<string> connection)
+            public SampleConversionLayer(IConnection<string, string> connection)
                 : base(connection)
             {
             }
@@ -35,7 +35,7 @@ namespace CometGateway.Server.Gateway.Tests
         public void TestPassThroughMethods()
         {
             MockRepository mocks = new MockRepository();
-            IConnection<string> stubConnection = mocks.DynamicMock<IConnection<string>>();
+            IConnection<string, string> stubConnection = mocks.DynamicMock<IConnection<string, string>>();
 
             stubConnection.Expect(c => c.StartConnect("server", 7));
             stubConnection.Expect(c => c.Connected).Return(true);                        
@@ -56,7 +56,7 @@ namespace CometGateway.Server.Gateway.Tests
         public void TestPassThroughEvents()
         {
             MockRepository mocks = new MockRepository();
-            IConnection<string> stubConnection = mocks.StrictMock<IConnection<string>>();
+            IConnection<string, string> stubConnection = mocks.StrictMock<IConnection<string, string>>();
 
             var conversionLayer = new SampleConversionLayer(stubConnection);
 

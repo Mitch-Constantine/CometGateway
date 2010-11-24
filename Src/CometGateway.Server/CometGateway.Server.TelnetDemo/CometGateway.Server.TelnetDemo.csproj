@@ -35,11 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AspComet">
+    <Reference Include="AspComet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\Lib\ASPComet\AspComet.dll</HintPath>
     </Reference>
     <Reference Include="Autofac">
       <HintPath>..\..\..\Lib\Autofac\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Lib\Log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\Lib\ASPComet\Machine.Specifications.dll</HintPath>
@@ -125,7 +128,9 @@
     <Content Include="Scripts\Views\Main\Index.js" />
     <Content Include="Scripts\Views\Main\IndexTest.js" />
     <Content Include="Views\Main\Index.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

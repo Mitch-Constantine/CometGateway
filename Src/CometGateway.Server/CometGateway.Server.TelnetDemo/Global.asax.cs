@@ -13,6 +13,7 @@ using CometGateway.Server.TelnetDemo.Controllers;
 using CometGateway.Utilities;
 using Microsoft.Practices.ServiceLocation;
 using CometGateway.Server.Gateway;
+using CometGateway.Server.Gateway.ANSIColorsSupport;
 
 
 namespace CometGateway.Server.TelnetDemo
@@ -27,7 +28,7 @@ namespace CometGateway.Server.TelnetDemo
 
             routes.MapRoute(
                 "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
+                "{action}/{id}", // URL with parameters
                 new { controller = "Main", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
         }
@@ -55,10 +56,14 @@ namespace CometGateway.Server.TelnetDemo
             }
             builder.RegisterType<TelnetProtocolTranslator>().As<TelnetProtocolTranslator>();
             builder.RegisterType<MessageHandlerCache>().As<IMessageHandlerCache>().SingleInstance();
-            builder.RegisterType<BytesToStringConversionLayer>().As<IConnection<string>>();
             builder.RegisterType<SocketConnection>().As<ISocketConnection>();
             builder.RegisterType<TelnetConnection>().As<ITelnetConnection>();
             builder.RegisterType<TelnetStateMachine>().As<ITelnetStateMachine>();
+            builder.RegisterType<BytesToStringConversionLayer>()
+                .As<IRawStringConnection>();
+            builder.RegisterType<ANSICommandsDecoder>().As<IConnection<IANSICommand[], string>>();
+            builder.RegisterType<ANSICommandStateMachine>().As<IANSICommandsStateMachine>();
+            builder.RegisterType<ANSICommandToHTMLConverter>().As<IHTMLConnection>();
 
             // Set up the common service locator
             container = builder.Build();

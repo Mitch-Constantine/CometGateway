@@ -11,7 +11,8 @@ var PageController = function (cometWrapper) {
                 $(".dialog").each(function (index, e) {
                     $(e).dialog({
                         autoOpen: false,
-                        title: $(e).find(".header").text()
+                        title: $(e).find(".header").text(),
+                        width: "25em"
                     });
                 });
             },
@@ -64,6 +65,8 @@ var PageController = function (cometWrapper) {
 
     function _handle_connectionSucceeded(messageData) {
         dialogSwitcher.setDialog(null);
+        $("#txtTextTyped").focus();
+        $("#textReceived").text("")
     }
 
     function _handle_disconnected(messageData) {
@@ -85,6 +88,20 @@ var PageController = function (cometWrapper) {
             });
     }
 
+    function _getDefaultButton(divSelector) {
+        return $(divSelector).find("button.default");
+    }
+
+    function _handleEnter(divSelector) {
+        var inputsOnDiv = $(divSelector).find(":text");
+        inputsOnDiv.keydown(function(e) {
+            var ENTER = 13;
+            if (e.which == ENTER) {
+                _getDefaultButton(divSelector).trigger('click');
+            }
+        });
+    }
+
     return {
         pageLoaded: function () {
             cometWrapper.onConnectionCompleted = _onConnectionCompleted;
@@ -93,10 +110,27 @@ var PageController = function (cometWrapper) {
             cometWrapper.init($.cometd, cometdPath, _getChannelId());
 
             dialogSwitcher.loadDialogs();
+
+            _handleEnter(".contentWrapper");
+            this.parseServerPort();
         },
 
         testSetup: function () {
             dialogSwitcher.loadDialogs();
+            this.parseServerPort();
+        },
+
+        parseServerPort: function () {
+            var server = $("#hdnServer").val();
+            var port = $("#hdnPort").val();
+
+            if (!server || !port) {
+                return;
+            }
+
+            $("#txtServer").val(server);
+            $("#txtPort").val(port);
+            this.onClickConnect();
         },
 
         onClickConnect: function () {
@@ -112,13 +146,17 @@ var PageController = function (cometWrapper) {
         },
 
         onClickSend: function () {
+            var text = $("#txtTextTyped").val() + "\n";
             cometWrapper.sendMessage(
                 {
                     type: "textEntered",
-                    text: $("#txtTextTyped").val() + "\n"
+                    text: text
                 });
-            $("#txtTextTyped").val("");
-        }
+            $("#txtTextTyped")
+                    .val("")
+                    .focus();
+            $("#textReceived").append(text);
+        },
     };
 };
 
@@ -134,5 +172,6 @@ if (!inTestMode()) {
         pageController.pageLoaded();
         $("#btnConnect").click(function () { pageController.onClickConnect(); });
         $("#btnLineReady").click(function () { pageController.onClickSend(); });
+        $("#btnCancelConnect").click(function(e) {window.location.reload();});
     });
 }

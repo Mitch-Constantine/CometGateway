@@ -1,9 +1,49 @@
 ﻿pre {
-    background:none repeat scroll 0 0 #111111;
-    color:#BFBFBF;
+    padding:0px;
+    margin:0px;
+    border:0px;
+    width:100%;
+}
+
+.inputText
+{
+    font:serif;
+    width: 90%;
+}
+
+.SendButton 
+{
+    font:serif;
+    width:9%;
+}
+
+.contentWrapper
+{
+    position:relative;
+    width:100%;
+    margin: 0 auto;
+    text-align:left;
+    width:100%;
+}
+
+.preHolder
+{
+    background:none repeat scroll 0 0 black;
+    color:white;
     font:12px Monaco,"Lucida Console","Courier New",Courier;
-    padding:5px;
-    height: 40em;
+    height: 30em;
+    overflow:auto;
+}
+
+button
+{
+    float:right;
+}
+
+label
+{
+    display:inline-block;
+    width: 7em;
 }
 
 .header 

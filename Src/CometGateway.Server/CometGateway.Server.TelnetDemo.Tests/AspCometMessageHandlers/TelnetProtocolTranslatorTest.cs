@@ -20,7 +20,7 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
         public void ConnectStartsConnectionAndCaches()
         {
             MockRepository mockRepository = new MockRepository();
-            var socketConnection = mockRepository.DynamicMock<IConnection<string>>();
+            var socketConnection = mockRepository.DynamicMock<IHTMLConnection>();
             TelnetProtocolTranslator connectMessageHandler = 
                 new TelnetProtocolTranslator(socketConnection, null, null);
 
@@ -228,7 +228,7 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
         public void TextTypedForwardsLine()
         {
             MockRepository mockRepository = new MockRepository();
-            var socketConnection = mockRepository.DynamicMock<IConnection<string>>();
+            var socketConnection = mockRepository.DynamicMock<IHTMLConnection>();
             var connectMessageHandler = new TelnetProtocolTranslator(socketConnection, null, null);
 
             socketConnection.Expect(connection => connection.Send("line typed"));
@@ -254,7 +254,7 @@ namespace CometGateway.Server.TelnetDemo.Tests.AspCometMessageHandlers
             var messageHandlerCache = mockRepository.StrictMock<IMessageHandlerCache>();
             messageHandlerCache.Expect(mh => mh.Remove(aClient));
 
-            var connection = mockRepository.StrictMock<IConnection<string>>();
+            var connection = mockRepository.StrictMock<IHTMLConnection>();
             connection.Expect(conn => conn.StartDisconnect());
 
             TelnetProtocolTranslator messageHandler = new TelnetProtocolTranslator(

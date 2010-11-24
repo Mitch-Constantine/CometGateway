@@ -22,16 +22,20 @@
 </head>
 <body>
     <%=Html.Hidden("applicationPath", Request.ApplicationPath)%>
+    <%=Html.Hidden("hdnServer", ViewData["server"])%>
+    <%=Html.Hidden("hdnPort", ViewData["port"])%>
 
-    <pre id="textReceived"></pre>
-    <input type="text" id="txtTextTyped" />
-    <button type="button" id="btnLineReady">Send</button>
+    <div class="contentWrapper">
+        <div id="textReceived" class="preHolder"></div>
+        <input type="text" id="txtTextTyped" class="inputText"/>
+        <button type="button" id="btnLineReady" class="SendButton default">Send</button>
+    </div>
 
     <div id="connectDialog" style="display:none" class="dialog">
         <span class="header">Connect to server</span>
         <p><label for='txtServer'>Server:</label><input type='text' id='txtServer' /></p>
         <p><label for='txtPort'>Port:</label><input type='text' id='txtPort' /></p>
-        <p><button id='btnConnect'>Connect</button></p>
+        <p><button id='btnConnect' class='default'>Connect</button></p>
     </div>
 
     <div id="cancelDialog" style="display:none" class="dialog">

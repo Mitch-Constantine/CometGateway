@@ -31,14 +31,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AspComet">
+    <Reference Include="AspComet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\Lib\ASPComet\AspComet.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Lib\Log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\Lib\ServiceLocator\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,7 +51,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANSIColorsSupport\ANSICommandsDecoder.cs" />
+    <Compile Include="ANSIColorsSupport\ANSICommandStateMachine.cs" />
+    <Compile Include="ANSIColorsSupport\ANSICommandToHTMLConverter.cs" />
+    <Compile Include="ANSIColorsSupport\BackgroundColorCommand.cs" />
+    <Compile Include="ANSIColorsSupport\CharHTMLCommand.cs" />
+    <Compile Include="ANSIColorsSupport\ForegroundColorCommand.cs" />
+    <Compile Include="ANSIColorsSupport\IANSICommand.cs" />
+    <Compile Include="ANSIColorsSupport\IANSICommandAcceptor.cs" />
+    <Compile Include="ANSIColorsSupport\IANSICommandsStateMachine.cs" />
+    <Compile Include="ANSIColorsSupport\NewLineHTMLCommand.cs" />
+    <Compile Include="ANSIColorsSupport\ResetCommand.cs" />
+    <Compile Include="ANSIColorsSupport\SetBoldCommand.cs" />
+    <Compile Include="ANSIColorsSupport\SetItalicCommand.cs" />
+    <Compile Include="ANSIColorsSupport\SetReverseVideoCommand.cs" />
+    <Compile Include="ANSIColorsSupport\SetStrikethroughCommand.cs" />
+    <Compile Include="ANSIColorsSupport\SetUnderlineCommand.cs" />
     <Compile Include="BytesToStringConversionLayer.cs" />
+    <Compile Include="IHTMLConnection.cs" />
+    <Compile Include="IRawStringConnection.cs" />
     <Compile Include="ITelnetConnection.cs" />
     <Compile Include="TelnetStateMachine.cs" />
     <Compile Include="ITelnetStateMachine.cs" />

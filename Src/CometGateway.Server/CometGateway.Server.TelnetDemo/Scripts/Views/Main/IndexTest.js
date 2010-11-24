@@ -72,6 +72,7 @@ test("testConnectSucceeded", function () {
         }
     } ();
 
+    $("#textReceived").text("AAAB");
     $("#txtServer").val("aardwolf.com");
     $("#txtPort").val("4000");
     var testPageController = new PageController(stubCometWrapper);
@@ -81,6 +82,7 @@ test("testConnectSucceeded", function () {
 
     ok(!$("#connectDialog").dialog("isOpen"), "Connect dialog closed after connection succeeded");
     ok(!$("#cancelDialog").dialog("isOpen"), "Cancel dialog open after connection succeeded");
+    equal($("#textReceived").text(), "");
 });
 
 test("testErrorOccurred", function () {
@@ -189,6 +191,7 @@ test("typeText", function () {
     } ();
 
     $("#txtTextTyped").val("line typed");
+    $("#textReceived").text("ABCD");
     var testPageController = new PageController(stubCometWrapper);
     testPageController.testSetup();
     testPageController.onClickSend();
@@ -196,6 +199,30 @@ test("typeText", function () {
     equal(stubCometWrapper.message.type, "textEntered");
     equal(stubCometWrapper.message.text, "line typed\n");
     equal($("#txtTextTyped").val(), "");
+    equal($("#textReceived").text(), "ABCDline typed\n");
+});
+
+test("parse query - aardwolf", function () {
+    $("#hdnServer").val("aardwolf.com");
+    $("#hdnPort").val("4000");
+    stubCometWrapper = function () {
+        return {
+            message: { data: { type: null, server: null, port: null} },
+            onMessageReceived: null,
+            sendMessage: function (message) {
+                this.message = message;
+            }
+        }
+    } ();
+
+    var testPageController = new PageController(stubCometWrapper);
+    testPageController.testSetup();
+
+    equal(stubCometWrapper.message.type, "connect");
+    equal(stubCometWrapper.message.server, "aardwolf.com");
+    equal(stubCometWrapper.message.port, "4000");
+    ok(!($("#connectDialog").dialog("isOpen")), "Connect dialog closed after comet connect");
+    ok($("#cancelDialog").dialog("isOpen"), "Cancel dialog open after comet connect");
 });
 
 QUnit.done = function () {

@@ -14,7 +14,7 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
         IANSICommandAcceptor,
         IHTMLConnection
     {
-        string htmlBuffer;
+        StringBuilder htmlBuffer = new StringBuilder();
         bool afterNewLine = true;
         Color color;
         Color backgroundColor;
@@ -42,8 +42,8 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
         {
             foreach (IANSICommand command in data)
                 command.ApplyTo(this);
-            string htmlBufferCopy = htmlBuffer;
-            htmlBuffer = "";
+            string htmlBufferCopy = htmlBuffer.ToString();
+            htmlBuffer = new StringBuilder();
             return htmlBufferCopy;
         }
 
@@ -51,10 +51,10 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
         {
             if (afterNewLine)
             {
-                htmlBuffer += "<pre>";
+                htmlBuffer.Append("<pre>");
                 if (GetStyles().Any())
                 { 
-                    htmlBuffer += FormattedTag("font");
+                    htmlBuffer.Append(FormattedTag("font"));
                     fontTagGenerated = true;
                 } 
                 afterFontChange = false;
@@ -63,16 +63,16 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
             {
                 if (fontTagGenerated)
                 { 
-                    htmlBuffer += "</font>";
+                    htmlBuffer.Append("</font>");
                     fontTagGenerated = false;
                 }
                 if (GetStyles().Any())
                 {
                     fontTagGenerated = true;
-                    htmlBuffer += FormattedTag("font");
+                    htmlBuffer.Append( FormattedTag("font") );
                 } 
             } 
-            htmlBuffer += HttpUtility.HtmlEncode(c);
+            htmlBuffer.Append( HttpUtility.HtmlEncode(c) );
             afterNewLine = false;
             afterFontChange = false;
         }
@@ -80,10 +80,10 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
         void IANSICommandAcceptor.AcceptNewLine()
         {
             if (fontTagGenerated) 
-                htmlBuffer += "</font>";
+                htmlBuffer.Append("</font>");
             if (afterNewLine)
-                htmlBuffer += FormattedTag("pre") + "&nbsp;";
-            htmlBuffer += "</pre>";
+                htmlBuffer.Append(FormattedTag("pre") + "&nbsp;");
+            htmlBuffer.Append("</pre>");
             afterFontChange = false;
             afterNewLine = true;
             fontTagGenerated = false;

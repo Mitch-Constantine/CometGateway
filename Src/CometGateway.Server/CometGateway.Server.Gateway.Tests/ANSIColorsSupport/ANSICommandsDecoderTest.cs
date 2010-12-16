@@ -12,7 +12,7 @@ namespace CometGateway.Server.Gateway.Tests.ANSIColorsSupport
     [TestClass]
     public class ANSICommandsDecoderTest
     {
-        const string ESC = "\x11";
+        const string ESC = "\x1B";
         [TestMethod]
         public void CharDecodesToCharCommand()
         {
@@ -141,12 +141,17 @@ namespace CometGateway.Server.Gateway.Tests.ANSIColorsSupport
         public void BogusCommandsAreIgnored()
         {
             var decoder = new ANSICommandsDecoder(null, new ANSICommandStateMachine());
-            IANSICommand[] actualCommands = decoder.ConvertFromInternalFormat("a" + ESC + "123b4");
+            IANSICommand[] actualCommands = decoder.ConvertFromInternalFormat("a" + ESC + "[123b4");
             CollectionAssert.AreEqual(
                     new IANSICommand[] 
                     { 
                         new CharHTMLCommand() {Char = 'a'},
-                        new CharHTMLCommand() {Char = 'b'}
+                        new CharHTMLCommand() {Char = ESC[0]},
+                        new CharHTMLCommand() {Char = '1'},
+                        new CharHTMLCommand() {Char = '2'},
+                        new CharHTMLCommand() {Char = '3'},
+                        new CharHTMLCommand() {Char = 'b'},
+                        new CharHTMLCommand() {Char = '4'}
                     },
                     actualCommands
                 );
@@ -222,6 +227,23 @@ namespace CometGateway.Server.Gateway.Tests.ANSIColorsSupport
                     { 
                         new SetReverseVideoCommand(true),
                         new SetReverseVideoCommand(false)
+                    },
+                    actualCommands
+                );
+        }
+
+        [TestMethod]
+        public void CompositeCommandDecodesToCompositeCode()
+        {
+            var decoder = new ANSICommandsDecoder(null, new ANSICommandStateMachine());
+            IANSICommand[] actualCommands = decoder.ConvertFromInternalFormat("a" + ESC + "[1;36mb");
+            CollectionAssert.AreEqual(
+                    new IANSICommand[] 
+                    { 
+                        new CharHTMLCommand() {Char = 'a'},
+                        new SetBoldCommand(true),
+                        new ForegroundColorCommand(Color.Cyan),
+                        new CharHTMLCommand() {Char = 'b'}
                     },
                     actualCommands
                 );

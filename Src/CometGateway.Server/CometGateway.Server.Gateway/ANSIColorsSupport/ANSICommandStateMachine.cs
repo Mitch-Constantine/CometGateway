@@ -8,32 +8,57 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
 {
     public class ANSICommandStateMachine : IANSICommandsStateMachine
     {
-        string commandBuffer = "";
+        StringBuilder commandBuffer = new StringBuilder();
 
-        public IANSICommand Decode(char received)
+        public IANSICommand[] Decode(char received)
         {
-            const char ESC = '\x11';
-            if (received == ESC || !String.IsNullOrEmpty(commandBuffer) )
-            {
-                commandBuffer += received;
-                var decodedCommand = DecodeCommand(commandBuffer);
-                if (decodedCommand != null)
-                    commandBuffer = "";
+            const char ESC = '\x1B';
 
-                int maxCommandLength = GetCommandMapping().Keys.Max(k => k.Length);
-                if (decodedCommand == null && commandBuffer.Length == maxCommandLength)
-                {
-                    commandBuffer = "";
-                    return null;
-                }
-                
-                return decodedCommand;
+            if (received == ESC)
+            {
+                commandBuffer.Append( received );
+                return new IANSICommand[]{};
             }
 
+            if (commandBuffer.Length > 0)
+            {
+                bool storeOpenBracket = 
+                    received == '[' && 
+                    commandBuffer.Length == 1;
+                bool storeCommand = 
+                        commandBuffer.Length >= 2 &&
+                        Char.IsDigit(received) || received == ';';
+                
+                if (storeOpenBracket || storeCommand)
+                {
+                    commandBuffer.Append( received );
+                    return new IANSICommand[] { };
+                }
+
+                if (commandBuffer.Length > 2 && received == 'm')
+                {
+                    var commands = commandBuffer.ToString().Substring(2);
+                    var arrCommands = commands.Split(';');
+
+                    commandBuffer = new StringBuilder();
+                    return (from cmd in arrCommands
+                            let decoded = DecodeCommand(cmd)
+                            where decoded != null
+                            select decoded)
+                                .ToArray();
+                }
+
+                var charCommands =
+                    (from c in commandBuffer.ToString()
+                        select new CharHTMLCommand {Char = c })
+                        .ToArray();
+                commandBuffer = new StringBuilder();
+                return charCommands;
+            }
             return
-                received == '\n' ? (IANSICommand)new NewLineHTMLCommand() :
-                received == '\r'? null :
-                new CharHTMLCommand() { Char = received };
+                received == '\n' ? new IANSICommand[] { new NewLineHTMLCommand() }:
+                received == '\r'? new IANSICommand[] {} :
+                new IANSICommand[] { new CharHTMLCommand() { Char = received } };
         }
 
         private IANSICommand DecodeCommand(string command)
@@ -59,9 +84,6 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
         
         private IDictionary<string, IANSICommand> GetCommandMapping()
         {
-            const string prefix = "\x11" + "[";
-            const string suffix = "m";
-
             IEnumerable<KeyValuePair<string, IANSICommand>>
                 setForegroundCommands = ColorBasedCommands(
                         "3", 
@@ -125,7 +147,7 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
                     .Union(resetCommand);
 
             return simplifiedCommands.ToDictionary(
-                pair => prefix + pair.Key + suffix, 
+                pair => pair.Key, 
                 pair => pair.Value
             );  
         }

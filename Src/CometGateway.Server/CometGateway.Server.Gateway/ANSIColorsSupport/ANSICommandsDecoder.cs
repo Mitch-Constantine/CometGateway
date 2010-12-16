@@ -25,8 +25,7 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
         internal override IANSICommand[] ConvertFromInternalFormat(string data)
         {
             return data
-                    .Select(c => stateMachine.Decode(c))
-                    .Where(command => command != null)
+                    .SelectMany(c => stateMachine.Decode(c))
                     .ToArray();
         }
     }

@@ -32,7 +32,10 @@ var PageController = function (cometWrapper) {
     } ();
 
     function _onConnectionCompleted() {
-        $("#connectDialog").dialog("open");
+        if (!_that.parseServerPort())
+            dialogSwitcher.setDialog("connectDialog");
+        else
+            _that.onClickConnect();
     }
 
     function _getChannelId() {
@@ -77,6 +80,9 @@ var PageController = function (cometWrapper) {
         $("#textReceived")
             .append(messageData.text)
             .scrollTo("max");
+        while ($("#textReceived pre").length > _that.getMaxLines()) {
+            $("#textReceived pre:first").remove();
+        }
     }
 
     function _handle_errorOccurred(messageData) {
@@ -94,7 +100,7 @@ var PageController = function (cometWrapper) {
 
     function _handleEnter(divSelector) {
         var inputsOnDiv = $(divSelector).find(":text");
-        inputsOnDiv.keydown(function(e) {
+        inputsOnDiv.keydown(function (e) {
             var ENTER = 13;
             if (e.which == ENTER) {
                 _getDefaultButton(divSelector).trigger('click');
@@ -102,9 +108,11 @@ var PageController = function (cometWrapper) {
         });
     }
 
-    return {
+    _that = {
         pageLoaded: function () {
-            cometWrapper.onConnectionCompleted = _onConnectionCompleted;
+            cometWrapper.onConnectionCompleted =
+                function () { _onConnectionCompleted(); };
+
             cometWrapper.onMessageReceived = _handleMessage;
             var cometdPath = $("#applicationPath").val() + "/comet.axd";
             cometWrapper.init($.cometd, cometdPath, _getChannelId());
@@ -112,7 +120,6 @@ var PageController = function (cometWrapper) {
             dialogSwitcher.loadDialogs();
 
             _handleEnter(".contentWrapper");
-            this.parseServerPort();
         },
 
         testSetup: function () {
@@ -125,12 +132,12 @@ var PageController = function (cometWrapper) {
             var port = $("#hdnPort").val();
 
             if (!server || !port) {
-                return;
+                return false;
             }
 
             $("#txtServer").val(server);
             $("#txtPort").val(port);
-            this.onClickConnect();
+            return true;
         },
 
         onClickConnect: function () {
@@ -157,7 +164,13 @@ var PageController = function (cometWrapper) {
                     .focus();
             $("#textReceived").append(text);
         },
+
+        getMaxLines: function () {
+            return 500;
+        }
     };
+
+    return _that;
 };
 
 

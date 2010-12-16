@@ -7,6 +7,6 @@ namespace CometGateway.Server.Gateway.ANSIColorsSupport
 {
     public interface IANSICommandsStateMachine
     {
-        IANSICommand Decode(char received);
+        IANSICommand[] Decode(char received);
     }
 }

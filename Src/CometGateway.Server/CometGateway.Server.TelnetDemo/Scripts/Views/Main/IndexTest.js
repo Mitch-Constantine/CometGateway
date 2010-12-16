@@ -208,6 +208,7 @@ test("parse query - aardwolf", function () {
     stubCometWrapper = function () {
         return {
             message: { data: { type: null, server: null, port: null} },
+            init: function() {},
             onMessageReceived: null,
             sendMessage: function (message) {
                 this.message = message;
@@ -216,13 +217,46 @@ test("parse query - aardwolf", function () {
     } ();
 
     var testPageController = new PageController(stubCometWrapper);
-    testPageController.testSetup();
+    testPageController.pageLoaded();
+    stubCometWrapper.onConnectionCompleted();
 
     equal(stubCometWrapper.message.type, "connect");
     equal(stubCometWrapper.message.server, "aardwolf.com");
     equal(stubCometWrapper.message.port, "4000");
     ok(!($("#connectDialog").dialog("isOpen")), "Connect dialog closed after comet connect");
     ok($("#cancelDialog").dialog("isOpen"), "Cancel dialog open after comet connect");
+});
+
+test("veryLongWindow", function () {
+
+    stubCometWrapper = function () {
+        return {
+            message: { data: { type: null, server: null, port: null} },
+            onMessageReceived: null,
+            sendMessage: function (message) {
+                this.message = message;
+            }
+        }
+    } ();
+
+    $("#txtServer").val("aardwolf.com");
+    $("#txtPort").val("4000");
+    var testPageController = new PageController(stubCometWrapper);
+    testPageController.testSetup()
+    testPageController.onClickConnect();
+    stubCometWrapper.onMessageReceived({ data: { type: "connectionSucceeded"} });
+    var initialText = "";
+    var textToKeep = "";
+    for (var i = 0; i < pageController.getMaxLines(); i++) {
+        var lineCrt = "<pre>Line " + i + "</pre>";
+        initialText += lineCrt;
+        if (i > 0) {
+            textToKeep += lineCrt;
+        }
+    }
+    $("#textReceived").append(initialText);
+    stubCometWrapper.onMessageReceived({ data: { type: "textReceived", text: "<pre>ABCD</pre>"} });
+    equal($("#textReceived").html(), textToKeep + "<pre>ABCD</pre>");
 });
 
 QUnit.done = function () {

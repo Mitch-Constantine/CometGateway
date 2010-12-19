@@ -71,6 +71,10 @@
       <Project>{772795A6-ED9E-4305-8A23-4DE11C851D75}</Project>
       <Name>CometGateway.Server.Gateway</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CometGateway.Server.TelnetDemo\CometGateway.Server.TelnetDemo.csproj">
+      <Project>{03AC43DF-6281-42D1-B390-0D0326D84845}</Project>
+      <Name>CometGateway.Server.TelnetDemo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

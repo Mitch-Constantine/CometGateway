@@ -91,6 +91,9 @@
     <Compile Include="AspCometMessageHandlers\TextReceivedMessage.cs" />
     <Compile Include="Common\IncludeScripts.cs" />
     <Compile Include="Common\EnableQUnit.cs" />
+    <Compile Include="Configuration\ITelnetServerConfigurationParser.cs" />
+    <Compile Include="Configuration\TelnetServerConfiguration.cs" />
+    <Compile Include="Configuration\TelnetServerConfigurationParser.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

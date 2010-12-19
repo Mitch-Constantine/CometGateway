@@ -89,6 +89,7 @@
     <Compile Include="AspCometMessageHandlers\TelnetProtocolTranslatorTest.cs" />
     <Compile Include="Common\EnableQUnitTest.cs" />
     <Compile Include="Common\IncludeScriptsTest.cs" />
+    <Compile Include="Configuration\ServersTest.cs" />
     <Compile Include="Controllers\MainControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestUtilities.cs" />

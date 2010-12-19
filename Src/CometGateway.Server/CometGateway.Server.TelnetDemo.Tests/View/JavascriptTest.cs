@@ -16,7 +16,6 @@ namespace CometGateway.Server.TelnetDemo.Tests.View
             using (var ie = new IE("http://localhost/CometGateway.Server.TelnetDemo/Test"))
             {
                 var failed = ie.Span(Find.ByClass("failed")).InnerHtml;
-                Console.WriteLine(failed);
                 Assert.AreEqual("0", failed);
             }
         }

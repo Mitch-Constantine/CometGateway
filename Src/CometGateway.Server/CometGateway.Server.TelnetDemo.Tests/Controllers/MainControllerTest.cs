@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using CometGateway.Server.TelnetDemo.Controllers;
 using CometGateway.Server.TelnetDemo.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rhino.Mocks;
+using CometGateway.Server.TelnetDemo.Configuration;
 
 namespace CometGateway.Server.TelnetDemo.Tests.Controllers
 {
@@ -20,11 +22,42 @@ namespace CometGateway.Server.TelnetDemo.Tests.Controllers
         }
 
         [TestMethod]
-        public void TestAardwolf()
+        public void NamedServerIsMatchedWithServerAction()
         {
-            var result = new MainController().Aardwolf() as ViewResult;
-            Assert.AreEqual("aardwolf.org", result.ViewData["server"]);
-            Assert.AreEqual("4000", result.ViewData["port"]);
+            var mocks = new MockRepository();
+            var controller = mocks.PartialMock<MainController>();
+            var configurationParser = mocks.StrictMock<ITelnetServerConfigurationParser>();
+            controller
+                .Expect(c => c.GetConfigurationParser())
+                .Return(configurationParser);
+            TelnetServerConfiguration[] serverConfiguration =
+                new[]
+                {
+                    new TelnetServerConfiguration
+                    {
+                        Name = "bogus",
+                        Server = "bogus.org",
+                        Port = 4000
+                    },
+                    new TelnetServerConfiguration
+                    {
+                        Name = "test",
+                        Server = "aardwolf.org",
+                        Port = 4000
+                    }
+                };
+            configurationParser.Expect(c => c.Parse())
+                .Return(serverConfiguration);
+
+            mocks.ReplayAll();
+            ActionResult result = controller.GetNamedServerActionResult("teSt");
+            Assert.AreEqual( 
+                "Index",
+                (result as ViewResult).ViewName
+            );
+            Assert.AreEqual("aardwolf.org", controller.ViewData["server"]);
+            Assert.AreEqual(4000, controller.ViewData["port"]);
+            mocks.VerifyAll();
         }
 
         [TestMethod]

@@ -21,7 +21,10 @@
     <%=Html.IncludePageScript() %>
 </head>
 <body>
-    <%=Html.Hidden("applicationPath", Request.ApplicationPath)%>
+    <%string applicationPath = Request.ApplicationPath.EndsWith("/") ? 
+          Request.ApplicationPath.Substring(0, Request.ApplicationPath.Length-1) :
+          Request.ApplicationPath; %>
+    <%=Html.Hidden("applicationPath", applicationPath)%>
     <%=Html.Hidden("hdnServer", ViewData["server"])%>
     <%=Html.Hidden("hdnPort", ViewData["port"])%>
 

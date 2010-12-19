@@ -256,7 +256,7 @@ test("veryLongWindow", function () {
     }
     $("#textReceived").append(initialText);
     stubCometWrapper.onMessageReceived({ data: { type: "textReceived", text: "<pre>ABCD</pre>"} });
-    equal($("#textReceived").html(), textToKeep + "<pre>ABCD</pre>");
+    equal($("#textReceived").html().toUpperCase(), (textToKeep + "<pre>ABCD</pre>").toUpperCase());
 });
 
 QUnit.done = function () {
